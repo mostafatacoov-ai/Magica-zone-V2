@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Inbox, Sparkles, GraduationCap, ShoppingBag, Users, FileCheck } from 'lucide-react';
+import { Inbox, Sparkles, GraduationCap, ShoppingBag, Users, FileCheck, Radio } from 'lucide-react';
 
 export function AdminNav({ lang }: { lang: string }) {
   const pathname = usePathname();
@@ -15,7 +15,8 @@ export function AdminNav({ lang }: { lang: string }) {
     { href: `/${lang}/admin/courses`, label: isAr ? 'إدارة الدورات' : 'Courses', icon: GraduationCap },
     { href: `/${lang}/admin/bazar`, label: isAr ? 'إدارة المتجر' : 'Bazar Store', icon: ShoppingBag },
     { href: `/${lang}/admin/users`, label: isAr ? 'فريق العمل' : 'Staff & Roles', icon: Users },
-    { href: `/${lang}/admin/assignments`, label: isAr ? 'واجبات الطلاب' : 'Assignments Review', icon: FileCheck },
+    { href: `/${lang}/admin/assignments`, label: isAr ? 'واجبات الطلاب' : 'Assignments', icon: FileCheck },
+    { href: `/${lang}/admin/radio`, label: isAr ? 'راديو ماجيكا' : 'Radio & Music', icon: Radio },
   ];
 
   return (
@@ -27,11 +28,10 @@ export function AdminNav({ lang }: { lang: string }) {
           <Link
             key={tab.href}
             href={tab.href}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
-              isActive
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${isActive
                 ? 'bg-blue-600 text-white shadow-sm'
                 : 'text-gray-600 hover:bg-gray-100 bg-white border border-gray-200'
-            }`}
+              }`}
           >
             <Icon className="w-4 h-4" />
             <span>{tab.label}</span>

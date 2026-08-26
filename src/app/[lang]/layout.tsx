@@ -3,7 +3,8 @@ import { Inter, Cairo } from 'next/font/google';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppButton } from '@/components/common/WhatsAppButton';
-import { BackgroundMusic } from '@/components/common/BackgroundMusic';
+import { GlobalRadioPlayer } from '@/components/common/GlobalRadioPlayer';
+import { RadioProvider } from '@/context/RadioContext';
 import '@/app/globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -30,11 +31,13 @@ export default function RootLayout({
   return (
     <html lang={params.lang} dir={isRtl ? 'rtl' : 'ltr'}>
       <body className={`${isRtl ? cairo.className : inter.className} min-h-screen flex flex-col bg-gray-50 text-gray-900 antialiased`}>
-        <Header lang={params.lang} />
-        <div className="flex-1">{children}</div>
-        <Footer lang={params.lang} />
-        <WhatsAppButton lang={params.lang} />
-        <BackgroundMusic />
+        <RadioProvider>
+          <Header lang={params.lang} />
+          <div className="flex-1">{children}</div>
+          <Footer lang={params.lang} />
+          <GlobalRadioPlayer lang={params.lang} />
+          <WhatsAppButton lang={params.lang} />
+        </RadioProvider>
       </body>
     </html>
   );
