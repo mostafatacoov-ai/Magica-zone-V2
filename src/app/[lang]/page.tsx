@@ -1,18 +1,76 @@
 import React from 'react';
 import Link from 'next/link';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default async function HomePage({ params }: { params: { lang: string } }) {
   const isAr = params.lang === 'ar';
+  const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
 
   const divisions = [
-    { titleEn: 'Magica Courses', titleAr: 'دورات ماجيكا', image: '/magica-Courses-print.png', href: `/${params.lang}/courses` },
-    { titleEn: 'Magica Camp', titleAr: 'مخيم ماجيكا', image: '/magica-camp-print.png', href: `/${params.lang}/camp` },
-    { titleEn: 'Magica Mind Games', titleAr: 'ألعاب العقل', image: '/magica-games-print.png', href: `/${params.lang}/activities` },
-    { titleEn: 'Magica Bazar', titleAr: 'بازار ماجيكا', image: '/magica-bazar-print.png', href: `/${params.lang}/bazar` },
-    { titleEn: 'Magica Podcast', titleAr: 'بودكاست ماجيكا', image: '/magica-Podcast-print.png' },
-    { titleEn: 'Magica Supplies', titleAr: 'مستلزمات ماجيكا', image: '/magica-Supplies-print.png' },
-    { titleEn: 'Magica Food', titleAr: 'طعام ماجيكا', image: '/magica-food-print.png' },
-    { titleEn: 'Magica Uniform', titleAr: 'زي ماجيكا', image: '/magica-Uniform-print.png' },
+    {
+      titleEn: 'Magica Courses',
+      titleAr: 'دورات ماجيكا',
+      descEn: 'Leadership, STEM & interactive workshops',
+      descAr: 'ورش القيادة، تحديات STEM، والابتكار',
+      image: '/magica-Courses-print.png',
+      href: `/${params.lang}/courses`,
+    },
+    {
+      titleEn: 'Magica Camp',
+      titleAr: 'مخيم ماجيكا',
+      descEn: 'Day camps & outdoor experiential programs',
+      descAr: 'معسكرات اليوم الواحد والمغامرات الميدانية',
+      image: '/magica-camp-print.png',
+      href: `/${params.lang}/camp`,
+    },
+    {
+      titleEn: 'Magica Mind Games',
+      titleAr: 'ألعاب العقل والأنشطة',
+      descEn: 'Active team building games & catalog',
+      descAr: 'ألعاب تفاعلية وبناء الفرق وحاسبة الباقات',
+      image: '/magica-games-print.png',
+      href: `/${params.lang}/activities`,
+    },
+    {
+      titleEn: 'Magica Bazar',
+      titleAr: 'بازار ماجيكا',
+      descEn: 'Event props, souvenirs & camp gear store',
+      descAr: 'متجر الأدوات، الهدايا، ومعدات المعسكرات',
+      image: '/magica-bazar-print.png',
+      href: `/${params.lang}/bazar`,
+    },
+    {
+      titleEn: 'Magica Podcast & Radio',
+      titleAr: 'بودكاست وراديو ماجيكا',
+      descEn: 'Live anthems, field chants & youth talks',
+      descAr: 'أناشيد المعسكر، هتافات الحماس، والبودكاست',
+      image: '/magica-Podcast-print.png',
+      href: `/${params.lang}/media`,
+    },
+    {
+      titleEn: 'Magica Supplies',
+      titleAr: 'مستلزمات وتجهيزات ماجيكا',
+      descEn: 'Turnkey event staging & facilitation hardware',
+      descAr: 'تجهيزات متكاملة ومعدات الأنشطة الميدانية',
+      image: '/magica-Supplies-print.png',
+      href: `/${params.lang}/supplies`,
+    },
+    {
+      titleEn: 'Magica Food',
+      titleAr: 'طعام وضيافة ماجيكا',
+      descEn: 'Camp lunchboxes & corporate catering',
+      descAr: 'وجبات المعسكرات الصحية وبوفيهات الشركات',
+      image: '/magica-food-print.png',
+      href: `/${params.lang}/food`,
+    },
+    {
+      titleEn: 'Magica Uniform',
+      titleAr: 'زي وأزياء ماجيكا',
+      descEn: 'Custom team apparel & coach wear',
+      descAr: 'يونيفورم مخصص وتطريز للمدارس والشركات',
+      image: '/magica-Uniform-print.png',
+      href: `/${params.lang}/uniform`,
+    },
   ];
 
   return (
@@ -79,34 +137,39 @@ export default async function HomePage({ params }: { params: { lang: string } })
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {divisions.map((div, idx) => {
-              const CardContent = (
-                <>
-                  <div className="aspect-square relative p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-                    <img 
-                      src={div.image} 
-                      alt={div.titleEn} 
-                      className={`w-full h-full object-contain transition-transform duration-700 drop-shadow-xl ${div.href ? 'group-hover:scale-110' : ''}`} 
-                    />
-                  </div>
-                  <div className="p-6 bg-white border-t border-gray-100 flex-grow">
-                    <h3 className="text-xl font-bold text-gray-900 text-center">
-                      {isAr ? div.titleAr : div.titleEn}
-                    </h3>
-                  </div>
-                </>
-              );
+              return (
+                <Link
+                  key={idx}
+                  href={div.href}
+                  className="group relative bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 transition-all duration-500 hover:-translate-y-2 cursor-pointer flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Image Area with Zoom */}
+                    <div className="aspect-square relative p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={div.image} 
+                        alt={div.titleEn} 
+                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 drop-shadow-xl" 
+                      />
+                    </div>
 
-              const baseClasses = "group relative bg-white rounded-[2rem] overflow-hidden shadow-sm border border-gray-100 flex flex-col";
-              const interactiveClasses = "hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer";
+                    {/* Text Details */}
+                    <div className="p-6 space-y-2">
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors text-center">
+                        {isAr ? div.titleAr : div.titleEn}
+                      </h3>
+                      <p className="text-xs text-gray-500 text-center leading-relaxed line-clamp-2">
+                        {isAr ? div.descAr : div.descEn}
+                      </p>
+                    </div>
+                  </div>
 
-              return div.href ? (
-                <Link key={idx} href={div.href} className={`${baseClasses} ${interactiveClasses}`}>
-                  {CardContent}
+                  {/* Explore Footer */}
+                  <div className="px-6 py-3.5 bg-gray-50/70 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:bg-blue-50 transition-colors">
+                    <span>{isAr ? 'استكشف القطاع' : 'Explore Sector'}</span>
+                    <ArrowIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                  </div>
                 </Link>
-              ) : (
-                <div key={idx} className={`${baseClasses} opacity-80`}>
-                  {CardContent}
-                </div>
               );
             })}
           </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { FoodMenu } from '@/components/modules/food/FoodMenu';
 import { Utensils, ShieldCheck, HeartPulse, Award } from 'lucide-react';

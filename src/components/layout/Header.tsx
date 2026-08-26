@@ -15,6 +15,8 @@ import {
   Utensils,
   ShoppingBag,
   Headphones,
+  Package,
+  Shirt,
 } from 'lucide-react';
 
 export function Header({ lang }: { lang: string }) {
@@ -66,10 +68,28 @@ export function Header({ lang }: { lang: string }) {
       href: `/${lang}/bazar`,
       labelEn: 'Magic Bazar Store',
       labelAr: 'البازار والمتجر',
-      descEn: 'Official uniforms, gear & facilitation toolkits',
-      descAr: 'اليونيفورم الرسمي، الأدوات الميدانية، والميداليات',
+      descEn: 'Official souvenirs, gear & facilitation toolkits',
+      descAr: 'الأدوات الميدانية، الميداليات، والهدايا التذكارية',
       icon: ShoppingBag,
       color: 'text-purple-600 bg-purple-50',
+    },
+    {
+      href: `/${lang}/supplies`,
+      labelEn: 'Supplies & Hardware',
+      labelAr: 'المستلزمات والتجهيزات',
+      descEn: 'Turnkey event staging, inflatables & props',
+      descAr: 'تجهيزات متكاملة، أدوات الفعاليات، ومعدات المعسكرات',
+      icon: Package,
+      color: 'text-cyan-600 bg-cyan-50',
+    },
+    {
+      href: `/${lang}/uniform`,
+      labelEn: 'Uniforms & Apparel',
+      labelAr: 'الأزياء واليونيفورم',
+      descEn: 'Custom team performance wear & coach vests',
+      descAr: 'يونيفورم موحد للمدارس والشركات والمدربين',
+      icon: Shirt,
+      color: 'text-pink-600 bg-pink-50',
     },
     {
       href: `/${lang}/media`,

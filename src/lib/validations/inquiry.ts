@@ -7,7 +7,7 @@ export const inquirySchema = z.object({
   organization: z.string().optional(),
   category: z.enum(['kids_youth', 'corporate', 'camp', 'bazar']),
   selectedActivities: z.array(z.string()).optional(),
-  estimatedParticipants: z.coerce.number().min(1, 'Minimum 1 participant required'),
+  estimatedParticipants: z.number().min(1, 'Minimum 1 participant required'),
   eventDate: z.string().optional(),
   location: z.string().optional(),
   notes: z.string().optional(),

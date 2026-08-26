@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import { IUser } from '@/types';
 
-export interface IUserDocument extends Omit<IUser, 'id'>, Document {
+export interface IUserDocument extends Omit<IUser, 'id' | '_id'>, Document {
   passwordHash: string;
 }
 

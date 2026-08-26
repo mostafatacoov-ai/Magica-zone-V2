@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle2, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, CheckCircle2, MessageCircle } from 'lucide-react';
 
 export default function ContactPage({ params }: { params: { lang: string } }) {
     const isAr = params.lang === 'ar';

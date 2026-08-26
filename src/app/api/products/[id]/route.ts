@@ -1,12 +1,3 @@
-import { NextRequest, NextResponse } from 'next/Here is the continuation to complete the **Unified Admin CMS** for the entire website.
-
----
-
-### 1. Complete Product API (`src/app/api/products/[id]/route.ts`)
-
-Create **`src/app/api/products/[id]/route.ts`**:
-
-```typescript
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db/mongodb';
 import { Product } from '@/lib/models/Product';

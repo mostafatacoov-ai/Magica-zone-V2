@@ -10,6 +10,7 @@ export type UserRole = 'student' | 'teacher' | 'employee' | 'admin';
 
 export interface IAssignmentSubmission {
   id?: string;
+  _id?: any;
   courseTitle: string;
   assignmentTitle: string;
   fileOrUrl: string;
@@ -20,6 +21,7 @@ export interface IAssignmentSubmission {
 
 export interface IUser {
   id?: string;
+  _id?: any;
   name: string;
   email: string;
   phone?: string;

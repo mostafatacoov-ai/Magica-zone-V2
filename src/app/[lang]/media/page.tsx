@@ -1,6 +1,6 @@
 import React from 'react';
 import { AudioPlayer } from '@/components/modules/media/AudioPlayer';
-import { Radio, Headphones, Sparkles } from 'lucide-react';
+import { Headphones } from 'lucide-react';
 
 export default function MediaPage({ params }: { params: { lang: string } }) {
     const isAr = params.lang === 'ar';

@@ -3,7 +3,21 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://magica-group.com';
     const languages = ['en', 'ar'];
-    const routes = ['', '/activities', '/camp', '/courses', '/food', '/bazar', '/about', '/contact', '/inquiry'];
+    const routes = [
+        '',
+        '/activities',
+        '/camp',
+        '/courses',
+        '/food',
+        '/bazar',
+        '/supplies',
+        '/uniform',
+        '/media',
+        '/about',
+        '/contact',
+        '/inquiry',
+        '/privacy',
+    ];
 
     const urls: MetadataRoute.Sitemap = [];
 
