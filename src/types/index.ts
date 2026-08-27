@@ -65,6 +65,7 @@ export interface IProduct {
 
 export interface ICourse {
   id?: string;
+  _id?: string;
   titleEn: string;
   titleAr: string;
   descriptionEn: string;
@@ -74,6 +75,11 @@ export interface ICourse {
   durationWeeks: number;
   sessionsCount: number;
   priceEGP: number;
+  instructorNameEn: string;
+  instructorNameAr: string;
+  instructorTitleEn?: string;
+  instructorTitleAr?: string;
+  instructorImage?: string;
   syllabusEn: string[];
   syllabusAr: string[];
   scheduleEn: string;

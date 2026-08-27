@@ -1,204 +1,516 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
+import {
+  Sparkles,
+  Tent,
+  GraduationCap,
+  ShoppingBag,
+  Gamepad2,
+  UtensilsCrossed,
+  Mic2,
+  Shirt,
+  Backpack,
+  Music,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle2,
+} from 'lucide-react';
+import { HeroVideo } from '@/components/modules/home/HeroVideo';
 
-export default async function HomePage({ params }: { params: { lang: string } }) {
+interface SectorItem {
+  id: string;
+  icon: any;
+  printImg: string;
+  borderColor: string;
+  badgeBg: string;
+  btnBg: string;
+  titleEn: string;
+  titleAr: string;
+  taglineEn: string;
+  taglineAr: string;
+  descEn: string;
+  descAr: string;
+  offersEn: string[];
+  offersAr: string[];
+  ctaHref: string;
+  ctaTextEn: string;
+  ctaTextAr: string;
+}
+
+export default function HomePage({ params }: { params: { lang: string } }) {
   const isAr = params.lang === 'ar';
   const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
 
-  const divisions = [
+  const sectors: SectorItem[] = [
     {
-      titleEn: 'Magica Courses',
-      titleAr: 'دورات ماجيكا',
-      descEn: 'Leadership, STEM & interactive workshops',
-      descAr: 'ورش القيادة، تحديات STEM، والابتكار',
-      image: '/magica-Courses-print.png',
-      href: `/${params.lang}/courses`,
+      id: "courses",
+      icon: GraduationCap,
+      printImg: "/magica-courses-print.png",
+      borderColor: "border-[#2563EB]/40",
+      badgeBg: "bg-[#2563EB]/10 text-[#2563EB]",
+      btnBg: "bg-[#2563EB] hover:bg-[#1D4ED8]",
+      titleEn: "Magica Courses",
+      titleAr: "دورات وأكاديمية ماجيكا",
+      taglineEn: "Tomorrow's Skills, Today",
+      taglineAr: "مهارات الغد، اليوم",
+      descEn: "Junior CEO & Financial Literacy Academy, Robotics, and leadership tracks for young innovators.",
+      descAr: "أكاديمية الرئيس التنفيذي الصغير، الذكاء المالي، الروبوتات، والقيادة لرواد المستقبل.",
+      offersEn: [
+        "Leadership & Project Management",
+        "E-Commerce & Digital Marketing",
+        "Robotics & AI Mastery",
+        "Executive Coding Mindset",
+      ],
+      offersAr: [
+        "القيادة وإدارة المشاريع",
+        "التجارة الإلكترونية والتسويق",
+        "الروبوتات والذكاء الاصطناعي",
+        "عقلية البرمجة والابتكار",
+      ],
+      ctaHref: `/${params.lang}/courses`,
+      ctaTextEn: "Explore All Courses",
+      ctaTextAr: "استكشف كافة الدورات والورش",
     },
     {
-      titleEn: 'Magica Camp',
-      titleAr: 'مخيم ماجيكا',
-      descEn: 'Day camps & outdoor experiential programs',
-      descAr: 'معسكرات اليوم الواحد والمغامرات الميدانية',
-      image: '/magica-camp-print.png',
-      href: `/${params.lang}/camp`,
+      id: "camp",
+      icon: Tent,
+      printImg: "/magica-camp-print.png",
+      borderColor: "border-[#059669]/40",
+      badgeBg: "bg-[#059669]/10 text-[#059669]",
+      btnBg: "bg-[#059669] hover:bg-[#047857]",
+      titleEn: "Magica Camp",
+      titleAr: "معسكرات ماجيكا",
+      taglineEn: "One Summer Changes Everything",
+      taglineAr: "صيف واحد يغير كل شيء",
+      descEn: "Royal Valley Adventure 2026 — outdoor field leadership, independence, and character cultivation.",
+      descAr: "مغامرة الوادي الملكي 2026 — بناء الشخصية القيادية، الاستقلالية، وتحديات الميدان.",
+      offersEn: [
+        "Summer & Holiday Camps",
+        "Outdoor Field Team Building",
+        "Hands-On Survival Skills",
+        "Confidence Cultivation",
+      ],
+      offersAr: [
+        "معسكرات صيفية وإجازات",
+        "تحديات بناء الفرق الميدانية",
+        "مهارات كشفية وحياتية",
+        "غرس الثقة والاستقلالية",
+      ],
+      ctaHref: `/${params.lang}/camp`,
+      ctaTextEn: "Explore Summer Camps",
+      ctaTextAr: "استكشف برامج المعسكرات",
     },
     {
-      titleEn: 'Magica Mind Games',
-      titleAr: 'ألعاب العقل والأنشطة',
-      descEn: 'Active team building games & catalog',
-      descAr: 'ألعاب تفاعلية وبناء الفرق وحاسبة الباقات',
-      image: '/magica-games-print.png',
-      href: `/${params.lang}/activities`,
+      id: "supplies",
+      icon: Backpack,
+      printImg: "/magica-Supplies-print.png",
+      borderColor: "border-[#E11D48]/40",
+      badgeBg: "bg-[#E11D48]/10 text-[#E11D48]",
+      btnBg: "bg-[#E11D48] hover:bg-[#BE123C]",
+      titleEn: "Magica Supplies",
+      titleAr: "مستلزمات وأدوات ماجيكا",
+      taglineEn: "Smart Executive CEO Gear",
+      taglineAr: "حقائب وأدوات القادة الصغار",
+      descEn: "Ergonomic, water-resistant CEO school backpacks and experiment toolkits.",
+      descAr: "حقائب مدرسية تنفيذية طبية مقاومة للماء وأدوات ابتكار متطورة.",
+      offersEn: [
+        "Executive CEO School Backpacks",
+        "Dedicated Tech & Tablet Sleeves",
+        "Ergonomic Spine Support",
+        "Heavy-Duty Waterproof Fabric",
+      ],
+      offersAr: [
+        "حقائب مدرسية تنفيذية",
+        "جيوب مبطنة للأجهزة التكنولوجية",
+        "دعامة طبية لحماية الظهر",
+        "أقمشة فائقة التحمل",
+      ],
+      ctaHref: `/${params.lang}/bazar`,
+      ctaTextEn: "Explore Smart Supplies",
+      ctaTextAr: "استكشف الحقائب والأدوات",
     },
     {
-      titleEn: 'Magica Bazar',
-      titleAr: 'بازار ماجيكا',
-      descEn: 'Event props, souvenirs & camp gear store',
-      descAr: 'متجر الأدوات، الهدايا، ومعدات المعسكرات',
-      image: '/magica-bazar-print.png',
-      href: `/${params.lang}/bazar`,
+      id: "games",
+      icon: Gamepad2,
+      printImg: "/magica-games-print.png",
+      borderColor: "border-[#9333EA]/40",
+      badgeBg: "bg-[#9333EA]/10 text-[#9333EA]",
+      btnBg: "bg-[#9333EA] hover:bg-[#7E22CE]",
+      titleEn: "Magica Mind Games",
+      titleAr: "ألعاب وفعاليات ماجيكا",
+      taglineEn: "Play, Think & Grow Your IQ",
+      taglineAr: "العب، فكّر، وطوّر ذكاءك",
+      descEn: "Merchant logic, margin mastery, and negotiation quests that sharpen real-world analytical skills.",
+      descAr: "منطق التاجر، احتراف هوامش الربح، ومغامرات التفاوض التي تصقل الذكاء التحليلي.",
+      offersEn: [
+        "Analytical Logic Challenges",
+        "Live Trading Simulator",
+        "Cooperative Problem Puzzles",
+        "Dynamic Points System",
+      ],
+      offersAr: [
+        "تحديات المنطق والذكاء",
+        "محاكي التداول والتبادل التجاري",
+        "ألغاز حل المشكلات التعاونية",
+        "نظام نقاط ومكافآت",
+      ],
+      ctaHref: `/${params.lang}/activities`,
+      ctaTextEn: "Explore Mind Games & Activities",
+      ctaTextAr: "استكشف ألعاب الذكاء والفعاليات",
     },
     {
-      titleEn: 'Magica Podcast & Radio',
-      titleAr: 'بودكاست وراديو ماجيكا',
-      descEn: 'Live anthems, field chants & youth talks',
-      descAr: 'أناشيد المعسكر، هتافات الحماس، والبودكاست',
-      image: '/magica-Podcast-print.png',
-      href: `/${params.lang}/media`,
+      id: "bazar",
+      icon: ShoppingBag,
+      printImg: "/magica-bazar-print.png",
+      borderColor: "border-[#EA580C]/40",
+      badgeBg: "bg-[#EA580C]/10 text-[#EA580C]",
+      btnBg: "bg-[#EA580C] hover:bg-[#C2410C]",
+      titleEn: "Magica Bazar",
+      titleAr: "بازار ومتجر ماجيكا",
+      taglineEn: "Live Kid-Run Marketplace",
+      taglineAr: "سوق حقيقي يديره الأطفال",
+      descEn: "Authentic marketplace where kids build their brand, pitch products, and manage real profits.",
+      descAr: "السوق الحقيقي حيث يؤسس الأطفال متاجرهم، يسوقون منتجاتهم، ويديرون أرباحهم.",
+      offersEn: [
+        "Kid-Run Online & Live Stores",
+        "Pricing & Negotiation Mastery",
+        "Innovative Handmade Goods",
+        "Real Capital & Profit Handling",
+      ],
+      offersAr: [
+        "متاجر حقيقية يديرها الأطفال",
+        "احتراف التسعير والتفاوض",
+        "منتجات مبتكرة ومصنوعات يدوية",
+        "إدارة رأس المال والأرباح",
+      ],
+      ctaHref: `/${params.lang}/bazar`,
+      ctaTextEn: "Explore Bazar Market",
+      ctaTextAr: "استكشف البازار ومتاجر الأطفال",
     },
     {
-      titleEn: 'Magica Supplies',
-      titleAr: 'مستلزمات وتجهيزات ماجيكا',
-      descEn: 'Turnkey event staging & facilitation hardware',
-      descAr: 'تجهيزات متكاملة ومعدات الأنشطة الميدانية',
-      image: '/magica-Supplies-print.png',
-      href: `/${params.lang}/supplies`,
+      id: "food",
+      icon: UtensilsCrossed,
+      printImg: "/magica-food-print.png",
+      borderColor: "border-[#16A34A]/40",
+      badgeBg: "bg-[#16A34A]/10 text-[#16A34A]",
+      btnBg: "bg-[#16A34A] hover:bg-[#15803D]",
+      titleEn: "Magica Food",
+      titleAr: "إطعام وضيافة ماجيكا",
+      taglineEn: "Eat Right = Think Right",
+      taglineAr: "غذاء ذكي = تفكير عبقري",
+      descEn: "Nutrient-rich Bento lunchboxes and brain-boosting meals crafted by certified nutritionists.",
+      descAr: "لانش بوكس صحي ووجبات ذكية مصممة بإشراف أخصائيي تغذية لزيادة التركيز والنشاط.",
+      offersEn: [
+        "Brain Power Energy Meals",
+        "Custom School Bento Boxes",
+        "100% Natural Preservative-Free",
+        "Event & Camp Meal Plans",
+      ],
+      offersAr: [
+        "وجبات تعزيز طاقة الدماغ",
+        "بينتو بوكس صحي للمدارس",
+        "طبيعي 100% بدون مواد حافظة",
+        "خطط وجبات المعسكرات والفعاليات",
+      ],
+      ctaHref: `/${params.lang}/food`,
+      ctaTextEn: "Explore Food & Bento Menus",
+      ctaTextAr: "استكشف قوائم الطعام الصحي",
     },
     {
-      titleEn: 'Magica Food',
-      titleAr: 'طعام وضيافة ماجيكا',
-      descEn: 'Camp lunchboxes & corporate catering',
-      descAr: 'وجبات المعسكرات الصحية وبوفيهات الشركات',
-      image: '/magica-food-print.png',
-      href: `/${params.lang}/food`,
+      id: "podcast",
+      icon: Mic2,
+      printImg: "/magica-Podcast-print.png",
+      borderColor: "border-[#4F46E5]/40",
+      badgeBg: "bg-[#4F46E5]/10 text-[#4F46E5]",
+      btnBg: "bg-[#4F46E5] hover:bg-[#3730A3]",
+      titleEn: "Magica Podcast",
+      titleAr: "بودكاست ماجيكا",
+      taglineEn: "Words That Matter",
+      taglineAr: "كلمات تصنع الفارق",
+      descEn: "Educational and psychology discussions, parenting guidance, and youth empowerment stories.",
+      descAr: "حوارات تربوية ونفسية، إرشادات لأولياء الأمور، وقصص نجاح ملهمة يقدمها الشباب.",
+      offersEn: [
+        "Child Psychology & Mentorship",
+        "Financial Fluency for Parents",
+        "Inspirational Youth Stories",
+        "On-Demand Audio Streaming",
+      ],
+      offersAr: [
+        "توجيه تربوي ونفسي للأطفال",
+        "تعليم الذكاء المالي في المنزل",
+        "قصص نجاح يقدمها الأطفال",
+        "بث صوتي متاح دائماً",
+      ],
+      ctaHref: `/${params.lang}/media`,
+      ctaTextEn: "Explore Podcasts",
+      ctaTextAr: "استمع إلى البودكاست والراديو",
     },
     {
-      titleEn: 'Magica Uniform',
-      titleAr: 'زي وأزياء ماجيكا',
-      descEn: 'Custom team apparel & coach wear',
-      descAr: 'يونيفورم مخصص وتطريز للمدارس والشركات',
-      image: '/magica-Uniform-print.png',
-      href: `/${params.lang}/uniform`,
+      id: "uniform",
+      icon: Shirt,
+      printImg: "/magica-Uniform-print.png",
+      borderColor: "border-[#1E3A8A]/40",
+      badgeBg: "bg-[#1E3A8A]/10 text-[#1E3A8A]",
+      btnBg: "bg-[#1E3A8A] hover:bg-[#172554]",
+      titleEn: "Magica Uniform",
+      titleAr: "يونيفورم ماجيكا",
+      taglineEn: "Wear Your Identity",
+      taglineAr: "ارتدِ هويتك بفخر",
+      descEn: "Breathable, anti-stain soft cotton explorer polo sets, caps, and premium founder hoodies.",
+      descAr: "طقم بولو وكاب المستكشف الرسمي وهوديز قطنية فاخرة تعزز روح الانتماء.",
+      offersEn: [
+        "Explorer Polo & Cap Sets",
+        "Junior Founder Premium Hoodies",
+        "Breathable Ultra-Comfort Cotton",
+        "Complete Size Range for All Ages",
+      ],
+      offersAr: [
+        "طقم بولو وكاب المستكشف",
+        "هوديز رائد الأعمال الفاخرة",
+        "قطن مسامي مضاد للتعرق",
+        "مقاسات لكافة الفئات العمرية",
+      ],
+      ctaHref: `/${params.lang}/bazar`,
+      ctaTextEn: "Explore Apparel",
+      ctaTextAr: "استكشف اليونيفورم الرسمي",
+    },
+    {
+      id: "music",
+      icon: Music,
+      printImg: "/0logo.png",
+      borderColor: "border-[#D946EF]/40",
+      badgeBg: "bg-[#D946EF]/10 text-[#D946EF]",
+      btnBg: "bg-[#D946EF] hover:bg-[#A21CAF]",
+      titleEn: "Magica Songs & Anthems",
+      titleAr: "أغاني وأناشيد ماجيكا",
+      taglineEn: "Stream & Download Anthems",
+      taglineAr: "استمع وحمّل الأناشيد",
+      descEn: "Official camp tracks including Level Up Your World, Magica Dreams, and Making Futures Bright.",
+      descAr: "الأناشيد الرسمية للمعسكرات ومقاطع التحفيز الصباحية وموسيقى التركيز.",
+      offersEn: [
+        "Online Streaming of 7+ Soundtracks",
+        "Free Studio-Quality MP3 Downloads",
+        "Morning Energy & Motivation Chants",
+        "Video Pitch Theme Music",
+      ],
+      offersAr: [
+        "بث مباشر لـ 7+ أناشيد رسمية",
+        "تحميل مجاني مباشر بجودة عالية",
+        "هتافات النشاط والطاقة الصباحية",
+        "الموسيقى التصويرية للعروض",
+      ],
+      ctaHref: `/${params.lang}/media`,
+      ctaTextEn: "Explore Songs & Radio",
+      ctaTextAr: "استمع وحمّل الأناشيد",
     },
   ];
 
   return (
-    <div className="w-full">
-      {/* Hero Section with Video Background */}
-      <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src="/Hero_Video.mp4" type="video/mp4" />
-        </video>
-        
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10" />
+    <div className="space-y-20 pb-20">
+      {/* Hero Section with Live Background Video */}
+      <section className="relative overflow-hidden min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center pt-20 pb-24 sm:pt-28 sm:pb-32 border-b border-amber-100/80">
+        {/* Background Video Player */}
+        <HeroVideo />
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-white/20 backdrop-blur-md mb-8 border border-white/10">
-            <span className="animate-pulse w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"></span>
-            <span>{isAr ? 'مرحباً بكم في مجموعة ماجيكا' : 'Welcome to Magica Group'}</span>
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-amber-100/90 text-amber-900 shadow-sm backdrop-blur-sm">
+            <Sparkles className="w-4 h-4 text-amber-600" />
+            <span>{isAr ? "حيث يبدأ التميز الإنساني وصناعة القادة" : "Where Human Excellence & Leadership Begin"}</span>
           </div>
 
-          <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight mb-6 drop-shadow-2xl">
-            {isAr
-              ? 'نبتكر لحظات لا تُنسى'
-              : 'Creating Unforgettable Experiences'}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-gray-900 tracking-tight max-w-5xl mx-auto leading-tight">
+            {isAr ? (
+              <>
+                ماجيكا زون: <span className="text-blue-600">حيث يصبح الأطفال قادة.</span>
+              </>
+            ) : (
+              <>
+                Magica Zone: <span className="text-blue-600">Where Children Become Leaders.</span>
+              </>
+            )}
           </h1>
 
-          <p className="mt-4 text-lg sm:text-2xl font-light max-w-3xl mx-auto leading-relaxed text-gray-200 drop-shadow-lg">
+          <p className="mt-6 text-base sm:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
             {isAr
-              ? 'مجموعة متكاملة من الخدمات التعليمية، الترفيهية، والمستلزمات المخصصة للإبداع والنمو.'
-              : 'A complete suite of educational, entertainment, and essential services tailored for creativity and growth.'}
+              ? "مهمتنا ليست الترفيه السلبي — بل الإعداد الشامل للحياة. نُمكّن الأطفال واليافعين من الذكاء المالي، ريادة الأعمال، القيادة، والمهارات التطبيقية للمستقبل."
+              : "Our mission isn't passive entertainment — it's comprehensive life preparation. We equip youth with financial literacy, entrepreneurship, leadership, and hands-on skills for life."}
           </p>
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#divisions"
-              className="px-8 py-4 text-base font-semibold text-gray-900 bg-white hover:bg-gray-100 rounded-2xl shadow-xl transition-all hover:scale-105"
+          <div className="pt-6 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="#sectors"
+              className="px-8 py-4 text-sm font-black text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-xl transition-all hover:scale-105"
             >
-              {isAr ? 'اكتشف خدماتنا' : 'Explore Our Divisions'}
-            </a>
+              {isAr ? "استكشف قطاعات وبرامج ماجيكا ↓" : "Explore Sectors & Offerings ↓"}
+            </Link>
+            <Link
+              href={`/${params.lang}/dashboard`}
+              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-black text-gray-800 bg-white border border-amber-200/80 hover:bg-amber-50/50 rounded-2xl transition-all shadow-md backdrop-blur-sm"
+            >
+              <span>{isAr ? "بوابة أولياء الأمور والطلاب" : "Parent & Student Portal"}</span>
+              <ArrowIcon className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Metrics Cards */}
+          <div className="pt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-white/95 backdrop-blur-md p-6 rounded-3xl border border-amber-100 shadow-md text-center">
+              <div className="text-3xl sm:text-4xl font-black text-blue-600">500+</div>
+              <div className="text-xs font-black text-gray-700 mt-1">{isAr ? "رائد أعمال صغير" : "Young Founders"}</div>
+            </div>
+            <div className="bg-white/95 backdrop-blur-md p-6 rounded-3xl border border-amber-100 shadow-md text-center">
+              <div className="text-3xl sm:text-4xl font-black text-indigo-600">9</div>
+              <div className="text-xs font-black text-gray-700 mt-1">{isAr ? "قطاعات تخصصية ومكتبة صوتية" : "Core Sectors & Music Library"}</div>
+            </div>
+            <div className="bg-white/95 backdrop-blur-md p-6 rounded-3xl border border-amber-100 shadow-md text-center">
+              <div className="text-3xl sm:text-4xl font-black text-emerald-600">100%</div>
+              <div className="text-xs font-black text-gray-700 mt-1">{isAr ? "بيئة آمنة للمستقبل" : "Future-Ready Safe Space"}</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Divisions Section */}
-      <section id="divisions" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
-              {isAr ? 'قطاعات ماجيكا' : 'Our Magica Divisions'}
-            </h2>
-            <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mb-6"></div>
-            <p className="text-lg text-gray-600">
+      {/* Philosophy Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 rounded-3xl p-8 sm:p-14 text-white shadow-2xl space-y-4 text-center sm:text-start flex flex-col md:flex-row items-center justify-between gap-8 border border-white/10">
+          <div className="max-w-2xl space-y-3">
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest block">
+              {isAr ? "فلسفتنا ورسالتنا" : "Our Philosophy & Mission"}
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black leading-tight">
               {isAr
-                ? 'تعرف على مجموعتنا المتنوعة من الخدمات والقطاعات المصممة خصيصاً لتلبية كافة احتياجاتك.'
-                : 'Discover our diverse range of services and divisions specially designed to cater to all your needs.'}
+                ? "نؤمن أن كل طفل يمتلك إمكانات قيادية وريادية لا حدود لها."
+                : "We believe every child possesses boundless entrepreneurial & leadership potential."}
+            </h2>
+            <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed">
+              {isAr
+                ? "في ماجيكا زون، نوفر منظومة متكاملة من 9 قطاعات ديناميكية — من الأسواق الواقعية ومسارات STEM إلى التغذية الصحية والأدوات التنفيذية — لبناء جيل من القادة الواثقين."
+                : "At Magica Zone, we provide an integrated ecosystem of 9 dynamic sectors — from real kid marketplaces and STEM tracks to nutrition and executive equipment — shaping youth into confident future leaders."}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {divisions.map((div, idx) => {
-              return (
-                <Link
-                  key={idx}
-                  href={div.href}
-                  className="group relative bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 transition-all duration-500 hover:-translate-y-2 cursor-pointer flex flex-col justify-between"
-                >
-                  <div>
-                    {/* Image Area with Zoom */}
-                    <div className="aspect-square relative p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
-                      <img 
-                        src={div.image} 
-                        alt={div.titleEn} 
-                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 drop-shadow-xl" 
-                      />
-                    </div>
-
-                    {/* Text Details */}
-                    <div className="p-6 space-y-2">
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors text-center">
-                        {isAr ? div.titleAr : div.titleEn}
-                      </h3>
-                      <p className="text-xs text-gray-500 text-center leading-relaxed line-clamp-2">
-                        {isAr ? div.descAr : div.descEn}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Explore Footer */}
-                  <div className="px-6 py-3.5 bg-gray-50/70 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:bg-blue-50 transition-colors">
-                    <span>{isAr ? 'استكشف القطاع' : 'Explore Sector'}</span>
-                    <ArrowIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+          <Link
+            href={`/${params.lang}/inquiry`}
+            className="px-6 py-4 bg-amber-400 hover:bg-amber-300 text-gray-950 font-black text-xs rounded-2xl shrink-0 transition-transform hover:scale-105 shadow-xl"
+          >
+            {isAr ? "احجز فعاليتك أو سجل طفلك" : "Enroll Your Child Now"}
+          </Link>
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-900 to-indigo-800 rounded-[3rem] p-10 sm:p-16 text-white text-center sm:text-start flex flex-col sm:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden">
-            {/* Decorative circles */}
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-blue-500/20 blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-indigo-500/20 blur-3xl"></div>
-            
-            <div className="max-w-2xl relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                {isAr ? 'هل أنت مستعد للانضمام إلينا؟' : 'Ready to Join Us?'}
-              </h2>
-              <p className="text-lg text-blue-100 leading-relaxed">
-                {isAr
-                  ? 'تواصل معنا لتصميم باقة مخصصة تناسب كافة احتياجاتك.'
-                  : 'Get in touch with us today to learn more about our complete offerings and tailor a package that fits your exact needs.'}
-              </p>
-            </div>
+      {/* The 9 Sectors Showcase with Print Art Graphics & Colors */}
+      <section id="sectors" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <span className="text-xs font-black text-blue-700 bg-blue-100/70 px-4 py-1.5 rounded-full uppercase tracking-wider">
+            {isAr ? "عالم ماجيكا الشامل" : "Our Comprehensive World"}
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-black text-gray-900">
+            {isAr ? "استكشف كافة قطاعات ماجيكا وعروضنا" : "Discover All Magica Sectors & What We Offer"}
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-600">
+            {isAr
+              ? "تصفح قطاعاتنا الـ 9 المتخصصة لاكتشاف البرامج، المنتجات، والأناشيد الصوتية مع روابط حية لكل قسم:"
+              : "Explore our 9 specialized divisions below to discover core offerings along with live previews and soundtracks:"}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sectors.map((sector) => {
+            const Icon = sector.icon;
+            const title = isAr ? sector.titleAr : sector.titleEn;
+            const tagline = isAr ? sector.taglineAr : sector.taglineEn;
+            const desc = isAr ? sector.descAr : sector.descEn;
+            const offers = isAr ? sector.offersAr : sector.offersEn;
+            const ctaText = isAr ? sector.ctaTextAr : sector.ctaTextEn;
+
+            return (
+              <div
+                key={sector.id}
+                className={`bg-white rounded-3xl p-6 sm:p-8 border-2 ${sector.borderColor} shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-6 group`}
+              >
+                <div className="space-y-4">
+                  {/* Top Graphic + Badge */}
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="relative w-14 h-14 shrink-0 rounded-2xl bg-amber-50/60 p-2 border border-gray-100 flex items-center justify-center overflow-hidden">
+                      <Image
+                        src={sector.printImg}
+                        alt={title}
+                        width={48}
+                        height={48}
+                        className="object-contain w-full h-full"
+                      />
+                    </div>
+
+                    <span className={`text-[11px] font-black px-3 py-1 rounded-full ${sector.badgeBg}`}>
+                      {tagline}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed mt-2 font-medium">{desc}</p>
+                  </div>
+
+                  {/* Feature Checklist */}
+                  <div className="space-y-1.5 pt-3 border-t border-gray-100">
+                    <span className="text-[11px] font-black text-gray-700 uppercase tracking-wider block mb-1">
+                      {isAr ? "ما يقدمه هذا القطاع:" : "What This Sector Offers:"}
+                    </span>
+                    {offers.map((offer, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-gray-600">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span className="font-medium">{offer}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bottom CTA with Brand Color */}
+                <div className="pt-4 border-t border-gray-100">
+                  <Link
+                    href={sector.ctaHref}
+                    className={`inline-flex items-center justify-between w-full py-3 px-4 text-xs font-black text-white ${sector.btnBg} rounded-2xl transition-all shadow-md`}
+                  >
+                    <span>{ctaText}</span>
+                    <ArrowIcon className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Final Enrollment CTA */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 rounded-3xl p-8 sm:p-14 text-white text-center sm:text-start flex flex-col sm:flex-row items-center justify-between gap-8 shadow-2xl border border-white/10">
+          <div className="max-w-xl space-y-2">
+            <h2 className="text-2xl sm:text-4xl font-black">
+              {isAr ? "هل أنت مستعد لتسجيل طفلك في عالم ماجيكا؟" : "Ready to Enroll Your Child in This Transformational World?"}
+            </h2>
+            <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
+              {isAr
+                ? "أنشئ حسابك الآن وافتح أبواب القيادة، ابتكارات STEM، والذكاء المالي لأطفالك."
+                : "Create an account now and open the doors of leadership, STEM innovation, and financial intelligence for your children."}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
-              href={`/${params.lang}/inquiry`}
-              className="relative z-10 px-8 py-4 text-lg font-bold text-blue-900 bg-white hover:bg-blue-50 rounded-2xl shrink-0 transition-all shadow-lg hover:scale-105"
+              href={`/${params.lang}/register`}
+              className="px-8 py-4 text-xs font-black text-gray-950 bg-amber-400 hover:bg-amber-300 rounded-2xl transition-transform hover:scale-105 shadow-xl"
             >
-              {isAr ? 'تواصل معنا الآن' : 'Contact Us Now'}
+              {isAr ? "تسجيل طفلك الآن" : "Register Your Child Now"}
+            </Link>
+            <Link
+              href={`/${params.lang}/about`}
+              className="px-6 py-4 text-xs font-bold text-white bg-white/15 hover:bg-white/25 rounded-2xl transition-colors"
+            >
+              {isAr ? "تعرف على ماجيكا" : "Learn More About Us"}
             </Link>
           </div>
         </div>

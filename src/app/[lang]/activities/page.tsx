@@ -4,6 +4,7 @@ import { Activity } from '@/lib/models/Activity';
 import { ActivityCard } from '@/components/modules/activities/ActivityCard';
 import { PackageCalculator } from '@/components/modules/calculator/PackageCalculator';
 import { IActivity } from '@/types';
+import { Target, Sparkles } from 'lucide-react';
 
 async function getActivities(): Promise<IActivity[]> {
   try {
@@ -23,14 +24,18 @@ export default async function ActivitiesPage({ params }: { params: { lang: strin
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
       {/* Header Banner */}
-      <div className="text-center max-w-3xl mx-auto">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900">
-          {isAr ? 'كتالوج الألعاب وبناء الباقات' : 'Activities & Custom Package Builder'}
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-blue-100 text-blue-800 shadow-sm">
+          <Target className="w-4 h-4 text-blue-600" />
+          <span>{isAr ? 'فعاليات وأنشطة ماجيكا التفاعلية' : 'Magica Events & Activities'}</span>
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black text-gray-900 leading-tight">
+          {isAr ? 'كتالوج فعاليات وأنشطة ماجيكا' : 'Magica Events & Activities Catalog'}
         </h1>
-        <p className="mt-4 text-base text-gray-600">
+        <p className="mt-4 text-base text-gray-600 leading-relaxed font-medium">
           {isAr
-            ? 'اختر الألعاب المنفردة أو استخدم الحاسبة التفاعلية لبناء باقة كاملة بخصومات خاصة لفعاليتك القادمة.'
-            : 'Explore turnkey games or use our interactive calculator to create a custom bundle with automatic discounts.'}
+            ? 'أنشطة وألعاب مصممة بعناية لبناء فرق العمل، تعزيز التواصل، وحل المشكلات التفاعلي للأطفال والشركات.'
+            : 'Turnkey interactive games and activities designed to foster teamwork, active problem-solving, and communication for youth and corporate teams.'}
         </p>
       </div>
 
@@ -41,13 +46,13 @@ export default async function ActivitiesPage({ params }: { params: { lang: strin
 
       {/* Activities Grid */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">
-          {isAr ? 'جميع الألعاب المتاحة' : 'All Available Games & Activities'}
+        <h2 className="text-2xl font-black text-gray-900">
+          {isAr ? 'جميع الألعاب والفعاليات المتاحة' : 'All Available Events & Games'}
         </h2>
 
         {activities.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
-            <p className="text-gray-500">
+          <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
+            <p className="text-gray-500 font-medium">
               {isAr ? 'لا توجد أنشطة متاحة حالياً.' : 'No activities available yet.'}
             </p>
           </div>

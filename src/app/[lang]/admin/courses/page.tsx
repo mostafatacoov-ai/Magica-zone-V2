@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ICourse, CourseCategory } from '@/types';
 import { AdminNav } from '@/components/modules/admin/AdminNav';
-import { Plus, Edit2, Trash2, CheckCircle2, XCircle, Search, RefreshCw, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, RefreshCw, X } from 'lucide-react';
 
 export default function AdminCoursesPage({ params }: { params: { lang: string } }) {
   const isAr = params.lang === 'ar';
@@ -23,6 +23,11 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
     durationWeeks: 4,
     sessionsCount: 8,
     priceEGP: 2000,
+    instructorNameEn: 'Eng. Mohamed Moustafa',
+    instructorNameAr: 'م. محمد مصطفى',
+    instructorTitleEn: 'Head of STEM & Innovation',
+    instructorTitleAr: 'رئيس مسار الابتكار وSTEM',
+    instructorImage: '/0logo.png',
     syllabusEn: '',
     syllabusAr: '',
     scheduleEn: 'Saturdays & Tuesdays (4-6 PM)',
@@ -59,6 +64,11 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
       durationWeeks: 4,
       sessionsCount: 8,
       priceEGP: 2000,
+      instructorNameEn: 'Eng. Mohamed Moustafa',
+      instructorNameAr: 'م. محمد مصطفى',
+      instructorTitleEn: 'Head of STEM & Innovation',
+      instructorTitleAr: 'رئيس مسار الابتكار وSTEM',
+      instructorImage: '/0logo.png',
       syllabusEn: '',
       syllabusAr: '',
       scheduleEn: 'Saturdays & Tuesdays (4-6 PM)',
@@ -80,6 +90,11 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
       durationWeeks: c.durationWeeks,
       sessionsCount: c.sessionsCount,
       priceEGP: c.priceEGP,
+      instructorNameEn: c.instructorNameEn || '',
+      instructorNameAr: c.instructorNameAr || '',
+      instructorTitleEn: c.instructorTitleEn || '',
+      instructorTitleAr: c.instructorTitleAr || '',
+      instructorImage: c.instructorImage || '/0logo.png',
       syllabusEn: c.syllabusEn ? c.syllabusEn.join(', ') : '',
       syllabusAr: c.syllabusAr ? c.syllabusAr.join(', ') : '',
       scheduleEn: c.scheduleEn,
@@ -146,7 +161,10 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
   };
 
   const filtered = courses.filter(
-    (c) => c.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) || c.titleAr.includes(searchQuery)
+    (c) =>
+      c.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.titleAr.includes(searchQuery) ||
+      (c.instructorNameEn && c.instructorNameEn.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -156,7 +174,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-            {isAr ? 'إدارة الورش والدورات التدريبية' : 'Manage Workshops & Courses'}
+            {isAr ? 'إدارة الورش والمدربين المعتمدين' : 'Manage Courses & Instructors'}
           </h1>
           <p className="text-xs text-gray-500 mt-1">
             {isAr ? `إجمالي الدورات: ${courses.length}` : `Total Courses: ${courses.length}`}
@@ -181,23 +199,35 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
         </div>
       </div>
 
+      {/* Search */}
+      <div className="relative w-full sm:w-80">
+        <Search className="w-4 h-4 text-gray-400 absolute start-3 top-3" />
+        <input
+          type="text"
+          placeholder={isAr ? 'بحث باسم الورشة أو المدرب...' : 'Search course or instructor...'}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full ps-9 pe-3 py-2 text-xs border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        />
+      </div>
+
       {/* Table */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         {loading ? (
-          <div className="py-20 text-center text-xs text-gray-500">{isAr ? 'جاري التحميل...' : 'Loading...'}</div>
+          <div className="py-20 text-center text-xs text-gray-500">Loading courses...</div>
         ) : filtered.length === 0 ? (
-          <div className="py-20 text-center text-xs text-gray-500">{isAr ? 'لا توجد دورات.' : 'No courses found.'}</div>
+          <div className="py-20 text-center text-xs text-gray-500">No courses found.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start text-xs">
               <thead className="bg-gray-50 text-gray-600 uppercase font-semibold border-b border-gray-100">
                 <tr>
-                  <th className="px-6 py-3.5">{isAr ? 'اسم الورشة' : 'Course Title'}</th>
-                  <th className="px-6 py-3.5">{isAr ? 'الفئة' : 'Category'}</th>
-                  <th className="px-6 py-3.5">{isAr ? 'الرسوم' : 'Tuition (EGP)'}</th>
-                  <th className="px-6 py-3.5">{isAr ? 'المدة' : 'Duration'}</th>
-                  <th className="px-6 py-3.5">{isAr ? 'الحالة' : 'Status'}</th>
-                  <th className="px-6 py-3.5 text-end">{isAr ? 'الإجراءات' : 'Actions'}</th>
+                  <th className="px-6 py-3.5">Course Title</th>
+                  <th className="px-6 py-3.5">Assigned Instructor</th>
+                  <th className="px-6 py-3.5">Tuition (EGP)</th>
+                  <th className="px-6 py-3.5">Duration</th>
+                  <th className="px-6 py-3.5">Status</th>
+                  <th className="px-6 py-3.5 text-end">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -209,17 +239,21 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                         <div className="font-bold text-gray-900">{c.titleEn}</div>
                         <div className="text-gray-500 text-[11px]">{c.titleAr}</div>
                       </td>
-                      <td className="px-6 py-4 capitalize">{c.category.replace('_', ' ')}</td>
+
+                      <td className="px-6 py-4">
+                        <div className="font-bold text-indigo-700">{c.instructorNameEn}</div>
+                        <div className="text-gray-400 text-[10px]">{c.instructorTitleEn}</div>
+                      </td>
+
                       <td className="px-6 py-4 font-bold text-indigo-600">{c.priceEGP.toLocaleString()} EGP</td>
                       <td className="px-6 py-4 text-gray-600">{c.durationWeeks} wks ({c.sessionsCount} sessions)</td>
                       <td className="px-6 py-4">
                         <button
                           onClick={() => toggleActive(c)}
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                            c.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600'
-                          }`}
+                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${c.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600'
+                            }`}
                         >
-                          {c.isActive ? (isAr ? 'مفعل' : 'Active') : (isAr ? 'معطل' : 'Inactive')}
+                          {c.isActive ? 'Active' : 'Inactive'}
                         </button>
                       </td>
                       <td className="px-6 py-4 text-end">
@@ -237,12 +271,12 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
         )}
       </div>
 
-      {/* Modal */}
+      {/* Modal with Instructor Inputs */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
             <div className="flex justify-between items-center pb-3 border-b border-gray-100">
-              <h3 className="font-bold text-gray-900">{editingCourse ? 'Edit Course' : 'Add New Course'}</h3>
+              <h3 className="font-bold text-gray-900">{editingCourse ? 'Edit Course & Instructor' : 'Add New Course'}</h3>
               <button onClick={() => setIsModalOpen(false)}><X className="w-5 h-5 text-gray-400" /></button>
             </div>
 
@@ -258,6 +292,32 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                 </div>
               </div>
 
+              {/* Instructor Fields */}
+              <div className="p-3.5 bg-indigo-50/60 rounded-2xl border border-indigo-100 space-y-3">
+                <span className="font-bold text-indigo-900 text-xs block">Instructor Details:</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold mb-1">Instructor Name (En) *</label>
+                    <input required value={formData.instructorNameEn} onChange={(e) => setFormData({ ...formData, instructorNameEn: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
+                  </div>
+                  <div>
+                    <label className="block font-semibold mb-1">اسم المدرب (عربي) *</label>
+                    <input required value={formData.instructorNameAr} onChange={(e) => setFormData({ ...formData, instructorNameAr: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold mb-1">Instructor Title / Role</label>
+                    <input value={formData.instructorTitleEn} onChange={(e) => setFormData({ ...formData, instructorTitleEn: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
+                  </div>
+                  <div>
+                    <label className="block font-semibold mb-1">Photo Path (e.g. /0logo.png)</label>
+                    <input value={formData.instructorImage} onChange={(e) => setFormData({ ...formData, instructorImage: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="block font-semibold mb-1">Description (English) *</label>
                 <textarea rows={2} required value={formData.descriptionEn} onChange={(e) => setFormData({ ...formData, descriptionEn: e.target.value })} className="w-full p-2 border rounded-lg" />
@@ -270,15 +330,6 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block font-semibold mb-1">Category</label>
-                  <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value as CourseCategory })} className="w-full p-2 border rounded-lg">
-                    <option value="stem_robotics">STEM & Robotics</option>
-                    <option value="leadership">Leadership</option>
-                    <option value="creative_arts">Creative Arts</option>
-                    <option value="outdoor_survival">Outdoor Survival</option>
-                  </select>
-                </div>
-                <div>
                   <label className="block font-semibold mb-1">Price (EGP) *</label>
                   <input type="number" required value={formData.priceEGP} onChange={(e) => setFormData({ ...formData, priceEGP: Number(e.target.value) })} className="w-full p-2 border rounded-lg" />
                 </div>
@@ -286,11 +337,15 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                   <label className="block font-semibold mb-1">Age Group</label>
                   <input value={formData.ageGroup} onChange={(e) => setFormData({ ...formData, ageGroup: e.target.value })} className="w-full p-2 border rounded-lg" />
                 </div>
+                <div>
+                  <label className="block font-semibold mb-1">Duration (Weeks)</label>
+                  <input type="number" value={formData.durationWeeks} onChange={(e) => setFormData({ ...formData, durationWeeks: Number(e.target.value) })} className="w-full p-2 border rounded-lg" />
+                </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-100 rounded-lg">Cancel</button>
-                <button type="submit" className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold">Save Course</button>
+                <button type="submit" className="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold">Save Course & Instructor</button>
               </div>
             </form>
           </div>

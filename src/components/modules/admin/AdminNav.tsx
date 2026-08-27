@@ -3,7 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Inbox, Sparkles, GraduationCap, ShoppingBag, Users, FileCheck, Radio } from 'lucide-react';
+import {
+  Inbox,
+  Sparkles,
+  GraduationCap,
+  ShoppingBag,
+  Users,
+  FileCheck,
+  Radio,
+  Backpack,
+  Shirt,
+} from 'lucide-react';
 
 export function AdminNav({ lang }: { lang: string }) {
   const pathname = usePathname();
@@ -13,7 +23,9 @@ export function AdminNav({ lang }: { lang: string }) {
     { href: `/${lang}/admin`, label: isAr ? 'طلبات الحجز' : 'Inquiries', icon: Inbox },
     { href: `/${lang}/admin/activities`, label: isAr ? 'إدارة الأنشطة' : 'Activities', icon: Sparkles },
     { href: `/${lang}/admin/courses`, label: isAr ? 'إدارة الدورات' : 'Courses', icon: GraduationCap },
-    { href: `/${lang}/admin/bazar`, label: isAr ? 'إدارة المتجر' : 'Bazar Store', icon: ShoppingBag },
+    { href: `/${lang}/admin/supplies`, label: isAr ? 'المستلزمات والحقائب' : 'Supplies & Bags', icon: Backpack },
+    { href: `/${lang}/admin/uniform`, label: isAr ? 'اليونيفورم والملابس' : 'Uniforms', icon: Shirt },
+    { href: `/${lang}/admin/bazar`, label: isAr ? 'إدارة البازار' : 'Bazar Store', icon: ShoppingBag },
     { href: `/${lang}/admin/users`, label: isAr ? 'فريق العمل' : 'Staff & Roles', icon: Users },
     { href: `/${lang}/admin/assignments`, label: isAr ? 'واجبات الطلاب' : 'Assignments', icon: FileCheck },
     { href: `/${lang}/admin/radio`, label: isAr ? 'راديو ماجيكا' : 'Radio & Music', icon: Radio },
