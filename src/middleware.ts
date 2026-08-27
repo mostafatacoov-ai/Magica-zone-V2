@@ -7,18 +7,35 @@ const defaultLocale = 'en';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if pathname already has a supported locale
+  // Extract current locale if present
+  const currentLocale = locales.find(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  ) || defaultLocale;
+
+  // 1. Admin Route Protection
+  const isAdminRoute = pathname.includes('/admin') && !pathname.includes('/admin/login');
+  if (isAdminRoute) {
+    const adminSession = request.cookies.get('magica_admin_session')?.value;
+    const authToken = request.cookies.get('magica_auth_token')?.value;
+
+    if (!adminSession && !authToken) {
+      const loginUrl = new URL(`/${currentLocale}/admin/login`, request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // 2. Bilingual Locale Redirection for root "/"
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
   if (pathnameHasLocale) return NextResponse.next();
 
-  // Redirect root "/" to default locale "/en"
+  // Redirect root "/" to "/en"
   request.nextUrl.pathname = `/${defaultLocale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.(?:png|jpg|jpeg|svg|gif|webp|mp4|mp3|ico)$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|audio|supplies|uniform).*)'],
 };
