@@ -151,6 +151,7 @@ export function Header({ lang }: { lang: string }) {
               src="/logo.png"
               alt="Magica Zone Logo"
               fill
+              sizes="(max-width: 768px) 144px, 176px"
               className="object-contain"
               priority
               onError={(e) => {

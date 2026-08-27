@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const session = getSessionUser();
     if (!session) {
-      return NextResponse.json({ success: false, user: null }, { status: 401 });
+      return NextResponse.json({ success: false, user: null }, { status: 200 });
     }
 
     await connectToDatabase();
