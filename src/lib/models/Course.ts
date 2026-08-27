@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import { ICourse } from '@/types';
 
-export interface ICourseDocument extends Omit<ICourse, 'id'>, Document { }
+export interface ICourseDocument extends Omit<ICourse, 'id' | '_id'>, Document { }
 
 const CourseSchema = new Schema<ICourseDocument>(
   {
