@@ -15,72 +15,104 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        const cleanInput = usernameOrEmail.trim().toLowerCase();
         const envAdminPasscode = process.env.ADMIN_PASSCODE || 'magica2026!';
-        const isMasterAdmin =
-            (usernameOrEmail.toLowerCase() === 'admin' || usernameOrEmail.toLowerCase() === 'admin@magica-group.com') &&
+
+        // 1. Direct Master Admin Check (Works even during DB latency)
+        const isMasterCredentials =
+            (cleanInput === 'admin' || cleanInput === 'admin@magica-group.com') &&
             password === envAdminPasscode;
 
-        await connectToDatabase();
+        if (isMasterCredentials) {
+            const token = signToken({
+                userId: 'master-admin-01',
+                email: 'admin@magica-group.com',
+                name: 'Magica Administrator',
+                role: 'admin',
+            });
 
-        // Check in database for registered admin
-        let user = await User.findOne({
-            $or: [
-                { email: usernameOrEmail.toLowerCase() },
-                { name: usernameOrEmail },
-            ],
+            const response = NextResponse.json({
+                success: true,
+                message: 'Admin authenticated successfully',
+                user: { name: 'Magica Administrator', email: 'admin@magica-group.com', role: 'admin' },
+            });
+
+            // Set cookie for both local and production HTTPS
+            response.cookies.set('magica_auth_token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 60 * 60 * 24 * 7,
+                path: '/',
+            });
+
+            response.cookies.set('magica_admin_session', 'authenticated', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 60 * 60 * 24 * 7,
+                path: '/',
+            });
+
+            // Synchronize admin account in MongoDB in background
+            connectToDatabase()
+                .then(async () => {
+                    const existing = await User.findOne({ email: 'admin@magica-group.com' });
+                    if (!existing) {
+                        const salt = await bcrypt.genSalt(10);
+                        const passwordHash = await bcrypt.hash(envAdminPasscode, salt);
+                        await User.create({
+                            name: 'Magica Administrator',
+                            email: 'admin@magica-group.com',
+                            passwordHash,
+                            role: 'admin',
+                        });
+                    }
+                })
+                .catch((e) => console.warn('[Admin Sync Notice]', e.message));
+
+            return response;
+        }
+
+        // 2. Database User Check (for staff/coaches with admin role)
+        await connectToDatabase();
+        const user = await User.findOne({
+            $or: [{ email: cleanInput }, { name: usernameOrEmail.trim() }],
             role: 'admin',
         });
 
-        // If master env credentials matched but DB user doesn't exist yet, auto-create
-        if (isMasterAdmin && !user) {
-            const salt = await bcrypt.genSalt(10);
-            const passwordHash = await bcrypt.hash(envAdminPasscode, salt);
-            user = await User.create({
-                name: 'Magica Administrator',
-                email: 'admin@magica-group.com',
-                passwordHash,
-                role: 'admin',
-            });
-        }
-
-        if (!user && !isMasterAdmin) {
+        if (!user) {
             return NextResponse.json(
-                { success: false, message: 'Invalid admin username or credentials' },
+                { success: false, message: 'Invalid admin credentials' },
                 { status: 401 }
             );
         }
 
-        // Verify password if DB user exists
-        if (user && !isMasterAdmin) {
-            const isValid = await bcrypt.compare(password, user.passwordHash);
-            if (!isValid) {
-                return NextResponse.json(
-                    { success: false, message: 'Incorrect password' },
-                    { status: 401 }
-                );
-            }
+        const isValid = await bcrypt.compare(password, user.passwordHash);
+        if (!isValid) {
+            return NextResponse.json(
+                { success: false, message: 'Incorrect password' },
+                { status: 401 }
+            );
         }
 
-        // Issue JWT Token with admin role
         const token = signToken({
-            userId: user ? user._id.toString() : 'master-admin',
-            email: user ? user.email : 'admin@magica-group.com',
-            name: user ? user.name : 'Administrator',
-            role: 'admin',
+            userId: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role,
         });
 
         const response = NextResponse.json({
             success: true,
-            message: 'Admin authenticated successfully',
-            user: { name: user ? user.name : 'Admin', role: 'admin' },
+            user: { name: user.name, email: user.email, role: user.role },
         });
 
-        // Set secure authentication cookies
         response.cookies.set('magica_auth_token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7, // 7 days
+            maxAge: 60 * 60 * 24 * 7,
             path: '/',
         });
 
@@ -94,6 +126,9 @@ export async function POST(req: NextRequest) {
 
         return response;
     } catch (error: any) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        return NextResponse.json(
+            { success: false, message: error.message || 'Authentication error' },
+            { status: 500 }
+        );
     }
 }
