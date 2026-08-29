@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -18,11 +18,32 @@ import {
   ArrowLeft,
   Flame,
   Camera,
+  X,
+  Maximize2,
 } from 'lucide-react';
 
 export default function CampPage({ params }: { params: { lang: string } }) {
   const isAr = params.lang === 'ar';
   const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
+
+  const [galleryPhotos, setGalleryPhotos] = useState<string[]>([
+    '/camp/1.jpg', '/camp/2.jpg', '/camp/3.jpg', '/camp/4.jpg',
+    '/camp/5.jpg', '/camp/6.jpg', '/camp/7.jpg', '/camp/8.jpg',
+    '/camp/9.jpg', '/camp/10.jpg', '/camp/11.jpg', '/camp/12.jpg'
+  ]);
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+
+  // Auto-fetch all uploaded camp images from the server
+  useEffect(() => {
+    fetch('/api/camp-photos')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.photos && data.photos.length > 0) {
+          setGalleryPhotos(data.photos);
+        }
+      })
+      .catch((err) => console.warn('Could not auto-load photos', err));
+  }, []);
 
   const skills = [
     {
@@ -84,21 +105,6 @@ export default function CampPage({ params }: { params: { lang: string } }) {
     { time: '03:00 PM', titleEn: 'Team Games & Wrap-Up', titleAr: 'الألعاب الختامية والتكريم', descEn: 'Reflection circle, points tally, and daily achievement medals.' },
   ];
 
-  const galleryPhotos = [
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 1' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 2' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 3' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 4' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 5' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 6' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 7' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 8' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 9' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 10' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 11' },
-    { src: '/magica-camp-print.png', alt: 'Camp Adventure Moment 12' },
-  ];
-
   return (
     <main className="space-y-20 pb-20">
       {/* 1. Hero Section */}
@@ -145,7 +151,7 @@ export default function CampPage({ params }: { params: { lang: string } }) {
         </div>
       </section>
 
-      {/* 2. Skills Section */}
+      {/* 2. The Skills We Build Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs font-black text-emerald-700 bg-emerald-100/70 px-4 py-1.5 rounded-full uppercase tracking-wider">
@@ -291,40 +297,69 @@ export default function CampPage({ params }: { params: { lang: string } }) {
         </div>
       </section>
 
-      {/* 5. 12-Photo Gallery Grid */}
+      {/* 5. Real Kids Camp Photos Gallery Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="inline-flex items-center gap-1.5 text-xs font-black text-amber-800 bg-amber-100 px-4 py-1.5 rounded-full uppercase tracking-wider">
             <Camera className="w-4 h-4 text-amber-600" />
-            <span>{isAr ? 'معرض صور المعسكر ✨' : 'Step Inside Our Magical World ✨'}</span>
+            <span>{isAr ? 'معرض صور أبطال المعسكر ✨' : 'Step Inside Our Magical World ✨'}</span>
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900">
             {isAr ? 'شاهد أبطالنا الصغار يصنعون ذكريات لا تُنسى' : 'Watch Our Little Heroes Create Unforgettable Memories'}
           </h2>
+          <p className="text-xs sm:text-sm text-gray-600 font-medium">
+            {isAr ? 'لقطات حية وتجارب واقعية من معسكراتنا ومغامرات الفرق الميدانية:' : 'Live snapshots from our outdoor camps, science stations, and team challenges:'}
+          </p>
         </div>
 
+        {/* Real Photos Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {galleryPhotos.map((photo, idx) => (
+          {galleryPhotos.map((photoSrc, idx) => (
             <div
               key={idx}
-              className="relative h-48 sm:h-64 rounded-3xl overflow-hidden bg-amber-50/60 border border-amber-100/80 shadow-sm hover:shadow-2xl transition-all duration-300 group"
+              onClick={() => setSelectedPhoto(photoSrc)}
+              className="relative h-52 sm:h-64 rounded-3xl overflow-hidden bg-amber-50/60 border border-amber-100/80 shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer"
             >
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              <img
+                src={photoSrc}
+                alt={`Magica Camp Hero ${idx + 1}`}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/magica-camp-print.png';
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
                 <span className="text-xs font-bold text-white">
-                  {isAr ? `لحظة معسكر ماجيكا #${idx + 1}` : `Camp Adventure #${idx + 1}`}
+                  {isAr ? `بطل ماجيكا #${idx + 1}` : `Camp Hero #${idx + 1}`}
                 </span>
+                <Maximize2 className="w-4 h-4 text-amber-300" />
               </div>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Lightbox Photo Preview Modal */}
+      {selectedPhoto && (
+        <div
+          onClick={() => setSelectedPhoto(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150 cursor-pointer"
+        >
+          <div className="relative max-w-4xl max-h-[85vh] w-full rounded-3xl overflow-hidden shadow-2xl">
+            <button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-4 end-4 p-2 bg-black/50 hover:bg-black/75 text-white rounded-full transition-colors z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <img
+              src={selectedPhoto}
+              alt="Camp Moment Full Preview"
+              className="w-full h-auto max-h-[85vh] object-contain rounded-3xl"
+            />
+          </div>
+        </div>
+      )}
 
       {/* 6. CTA Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
