@@ -1,25 +1,34 @@
-import React from 'react';
-import { connectToDatabase } from '@/lib/db/mongodb';
-import { Activity } from '@/lib/models/Activity';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { ActivityCard } from '@/components/modules/activities/ActivityCard';
 import { PackageCalculator } from '@/components/modules/calculator/PackageCalculator';
 import { IActivity } from '@/types';
-import { Target, Sparkles } from 'lucide-react';
+import { Target, Sparkles, RefreshCw } from 'lucide-react';
 
-async function getActivities(): Promise<IActivity[]> {
-  try {
-    await connectToDatabase();
-    const data = await Activity.find({ isActive: true }).sort({ createdAt: -1 }).lean();
-    return JSON.parse(JSON.stringify(data));
-  } catch (error) {
-    console.error('Failed to load activities:', error);
-    return [];
-  }
-}
-
-export default async function ActivitiesPage({ params }: { params: { lang: string } }) {
+export default function ActivitiesPage({ params }: { params: { lang: string } }) {
   const isAr = params.lang === 'ar';
-  const activities = await getActivities();
+  const [activities, setActivities] = useState<IActivity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadActivities = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/activities?all=true', { cache: 'no-store' });
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setActivities(json.data);
+      }
+    } catch (err) {
+      console.error('Failed to load activities', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadActivities();
+  }, []);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
@@ -46,11 +55,21 @@ export default async function ActivitiesPage({ params }: { params: { lang: strin
 
       {/* Activities Grid */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-black text-gray-900">
-          {isAr ? 'جميع الألعاب والفعاليات المتاحة' : 'All Available Events & Games'}
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-black text-gray-900">
+            {isAr ? 'جميع الألعاب والفعاليات المتاحة' : 'All Available Events & Games'}
+          </h2>
+          <span className="text-xs font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+            {activities.length} {isAr ? 'لعبة متاحة' : 'Games Available'}
+          </span>
+        </div>
 
-        {activities.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-24 bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center gap-3">
+            <RefreshCw className="w-6 h-6 text-blue-600 animate-spin" />
+            <p className="text-xs text-gray-500 font-bold">{isAr ? 'جاري تحميل الألعاب...' : 'Loading games catalog...'}</p>
+          </div>
+        ) : activities.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
             <p className="text-gray-500 font-medium">
               {isAr ? 'لا توجد أنشطة متاحة حالياً.' : 'No activities available yet.'}
@@ -59,7 +78,7 @@ export default async function ActivitiesPage({ params }: { params: { lang: strin
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activities.map((act) => (
-              <ActivityCard key={act.id || act.titleEn} activity={act} lang={params.lang} />
+              <ActivityCard key={act.id || (act as any)._id || act.titleEn} activity={act} lang={params.lang} />
             ))}
           </div>
         )}

@@ -467,7 +467,7 @@ export default function HomePage({ params }: { params: { lang: string } }) {
 
                 {/* Bottom Action Button */}
                 <div className="pt-4 border-t border-gray-100">
-                  <Link
+                  <Link prefetch={false}
                     href={sector.ctaHref}
                     className={`inline-flex items-center justify-between w-full py-3.5 px-4 text-xs font-black text-white ${sector.btnBg} rounded-2xl transition-all shadow-md`}
                   >

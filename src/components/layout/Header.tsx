@@ -145,7 +145,7 @@ export function Header({ lang }: { lang: string }) {
     <header className="sticky top-0 z-50 bg-[#FFFAF0]/95 backdrop-blur-md border-b border-amber-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
         {/* Official Brand Logo */}
-        <Link href={`/${lang}`} className="flex items-center gap-3">
+        <Link prefetch={false} href={`/${lang}`} className="flex items-center gap-3">
           <div className="relative h-10 w-36 sm:w-44">
             <Image
               src="/logo.png"
@@ -163,7 +163,7 @@ export function Header({ lang }: { lang: string }) {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link
+          <Link prefetch={false}
             href={`/${lang}`}
             className="text-xs font-black text-gray-800 hover:text-blue-600 transition-colors"
           >
@@ -191,7 +191,7 @@ export function Header({ lang }: { lang: string }) {
                 className="absolute top-full start-0 mt-1 w-84 sm:w-[420px] bg-white rounded-3xl border border-amber-100 shadow-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-150 space-y-2"
               >
                 {/* Comprehensive World Header Link */}
-                <Link
+                <Link prefetch={false}
                   href={`/${lang}#sectors`}
                   onClick={() => setServicesDropdownOpen(false)}
                   className="flex items-center justify-between p-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-sm hover:from-blue-700 hover:to-indigo-700 transition-all group"
@@ -211,7 +211,7 @@ export function Header({ lang }: { lang: string }) {
                   {magicaSectors.map((srv) => {
                     const Icon = srv.icon;
                     return (
-                      <Link
+                      <Link prefetch={false}
                         key={srv.href + srv.labelEn}
                         href={srv.href}
                         onClick={() => setServicesDropdownOpen(false)}
@@ -236,14 +236,14 @@ export function Header({ lang }: { lang: string }) {
             )}
           </div>
 
-          <Link
+          <Link prefetch={false}
             href={`/${lang}/about`}
             className="text-xs font-black text-gray-800 hover:text-blue-600 transition-colors"
           >
             {isAr ? 'عن ماجيكا' : 'About Us'}
           </Link>
 
-          <Link
+          <Link prefetch={false}
             href={`/${lang}/contact`}
             className="text-xs font-black text-gray-800 hover:text-blue-600 transition-colors"
           >
@@ -252,7 +252,7 @@ export function Header({ lang }: { lang: string }) {
 
           {/* Student Portal - Rendered ONLY When Signed In */}
           {currentUser && (
-            <Link
+            <Link prefetch={false}
               href={`/${lang}/dashboard`}
               className="text-xs font-black text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-xl transition-colors border border-blue-200"
             >
@@ -263,7 +263,7 @@ export function Header({ lang }: { lang: string }) {
 
         {/* Action & Auth Area */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
+          <Link prefetch={false}
             href={switchLangPath}
             className="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-amber-200/70 hover:bg-amber-50 rounded-xl transition-colors shadow-sm"
           >
@@ -273,7 +273,7 @@ export function Header({ lang }: { lang: string }) {
           {currentUser ? (
             /* Logged In: Show Name & Sign Out */
             <div className="flex items-center gap-2">
-              <Link
+              <Link prefetch={false}
                 href={`/${lang}/dashboard`}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-900 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 shadow-sm"
               >
@@ -292,7 +292,7 @@ export function Header({ lang }: { lang: string }) {
             </div>
           ) : (
             /* Logged Out: Show Sign In */
-            <Link
+            <Link prefetch={false}
               href={`/${lang}/login`}
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-gray-800 hover:text-blue-600 transition-colors"
             >
@@ -301,7 +301,7 @@ export function Header({ lang }: { lang: string }) {
             </Link>
           )}
 
-          <Link
+          <Link prefetch={false}
             href={`/${lang}/inquiry`}
             className="px-4 py-2 text-xs font-black text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all hover:scale-105"
           >
@@ -322,7 +322,7 @@ export function Header({ lang }: { lang: string }) {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#FFFAF0] border-b border-amber-200 px-4 pt-2 pb-6 space-y-3 text-xs max-h-[85vh] overflow-y-auto">
-          <Link
+          <Link prefetch={false}
             href={`/${lang}`}
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 font-bold text-gray-900 hover:text-blue-600"
@@ -337,7 +337,7 @@ export function Header({ lang }: { lang: string }) {
             {magicaSectors.map((srv) => {
               const Icon = srv.icon;
               return (
-                <Link
+                <Link prefetch={false}
                   key={srv.href + srv.labelEn}
                   href={srv.href}
                   onClick={() => setMobileMenuOpen(false)}
@@ -351,14 +351,14 @@ export function Header({ lang }: { lang: string }) {
           </div>
 
           <div className="pt-2 border-t border-amber-200 space-y-2">
-            <Link
+            <Link prefetch={false}
               href={`/${lang}/about`}
               onClick={() => setMobileMenuOpen(false)}
               className="block py-1.5 font-bold text-gray-800"
             >
               {isAr ? 'عن ماجيكا' : 'About Us'}
             </Link>
-            <Link
+            <Link prefetch={false}
               href={`/${lang}/contact`}
               onClick={() => setMobileMenuOpen(false)}
               className="block py-1.5 font-bold text-gray-800"
@@ -367,7 +367,7 @@ export function Header({ lang }: { lang: string }) {
             </Link>
 
             {currentUser && (
-              <Link
+              <Link prefetch={false}
                 href={`/${lang}/dashboard`}
                 onClick={() => setMobileMenuOpen(false)}
                 className="block py-1.5 font-bold text-blue-600"
@@ -378,7 +378,7 @@ export function Header({ lang }: { lang: string }) {
           </div>
 
           <div className="pt-4 border-t border-amber-200 flex items-center justify-between">
-            <Link
+            <Link prefetch={false}
               href={switchLangPath}
               className="px-3 py-1.5 font-bold text-gray-800 bg-white border border-amber-200 rounded-xl"
             >
@@ -396,7 +396,7 @@ export function Header({ lang }: { lang: string }) {
                 {isAr ? 'تسجيل الخروج' : 'Sign Out'}
               </button>
             ) : (
-              <Link
+              <Link prefetch={false}
                 href={`/${lang}/login`}
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-4 py-2 font-bold text-blue-600 bg-blue-50 rounded-xl"

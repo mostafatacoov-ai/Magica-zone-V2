@@ -19,6 +19,14 @@ const nextConfig = {
   },
   reactStrictMode: false,
   poweredByHeader: false,
+
+  // Flatten chunk filenames so Apache never encounters %5Blang%5D bracket folders
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.output.chunkFilename = 'static/chunks/[name]-[contenthash].js';
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
