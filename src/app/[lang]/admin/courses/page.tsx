@@ -1,9 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { ICourse, CourseCategory } from '@/types';
 import { AdminNav } from '@/components/modules/admin/AdminNav';
-import { Plus, Edit2, Trash2, Search, RefreshCw, X } from 'lucide-react';
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Search,
+  RefreshCw,
+  X,
+  Upload,
+  UserCheck,
+  Image as ImageIcon,
+} from 'lucide-react';
 
 export default function AdminCoursesPage({ params }: { params: { lang: string } }) {
   const isAr = params.lang === 'ar';
@@ -12,6 +23,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<ICourse | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [formData, setFormData] = useState({
     titleEn: '',
@@ -52,6 +64,33 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
     fetchCourses();
   }, []);
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    const data = new FormData();
+    data.append('file', file);
+    data.append('folder', 'instructors');
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      });
+      const json = await res.json();
+      if (json.success) {
+        setFormData((prev) => ({ ...prev, instructorImage: json.url }));
+      } else {
+        alert(json.message || 'Upload failed');
+      }
+    } catch (err) {
+      console.error('Upload error', err);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const openCreateModal = () => {
     setEditingCourse(null);
     setFormData({
@@ -64,10 +103,10 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
       durationWeeks: 4,
       sessionsCount: 8,
       priceEGP: 2000,
-      instructorNameEn: 'Eng. Mohamed Moustafa',
-      instructorNameAr: 'م. محمد مصطفى',
-      instructorTitleEn: 'Head of STEM & Innovation',
-      instructorTitleAr: 'رئيس مسار الابتكار وSTEM',
+      instructorNameEn: '',
+      instructorNameAr: '',
+      instructorTitleEn: '',
+      instructorTitleAr: '',
       instructorImage: '/0logo.png',
       syllabusEn: '',
       syllabusAr: '',
@@ -146,7 +185,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
         );
       }
     } catch (err) {
-      console.error('Failed to toggle status', err);
+      console.error(err);
     }
   };
 
@@ -156,7 +195,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
       const res = await fetch(`/api/courses/${id}`, { method: 'DELETE' });
       if (res.ok) setCourses((prev) => prev.filter((item) => (item.id || (item as any)._id) !== id));
     } catch (err) {
-      console.error('Failed to delete', err);
+      console.error(err);
     }
   };
 
@@ -223,8 +262,8 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
               <thead className="bg-gray-50 text-gray-600 uppercase font-semibold border-b border-gray-100">
                 <tr>
                   <th className="px-6 py-3.5">Course Title</th>
-                  <th className="px-6 py-3.5">Assigned Instructor</th>
-                  <th className="px-6 py-3.5">Tuition (EGP)</th>
+                  <th className="px-6 py-3.5">Instructor Photo & Details</th>
+                  <th className="px-6 py-3.5">Tuition</th>
                   <th className="px-6 py-3.5">Duration</th>
                   <th className="px-6 py-3.5">Status</th>
                   <th className="px-6 py-3.5 text-end">Actions</th>
@@ -236,13 +275,23 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                   return (
                     <tr key={id} className="hover:bg-gray-50/70 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="font-bold text-gray-900">{c.titleEn}</div>
+                        <div className="font-bold text-gray-900 text-sm">{c.titleEn}</div>
                         <div className="text-gray-500 text-[11px]">{c.titleAr}</div>
                       </td>
 
-                      <td className="px-6 py-4">
-                        <div className="font-bold text-indigo-700">{c.instructorNameEn}</div>
-                        <div className="text-gray-400 text-[10px]">{c.instructorTitleEn}</div>
+                      {/* Instructor Avatar & Name */}
+                      <td className="px-6 py-4 flex items-center gap-3">
+                        <div className="relative w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 overflow-hidden shrink-0 flex items-center justify-center">
+                          {c.instructorImage ? (
+                            <Image src={c.instructorImage} alt={c.instructorNameEn} fill className="object-cover" />
+                          ) : (
+                            <UserCheck className="w-5 h-5 text-indigo-600" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-bold text-indigo-900">{c.instructorNameEn}</div>
+                          <div className="text-gray-400 text-[10px]">{c.instructorTitleEn || c.instructorNameAr}</div>
+                        </div>
                       </td>
 
                       <td className="px-6 py-4 font-bold text-indigo-600">{c.priceEGP.toLocaleString()} EGP</td>
@@ -258,8 +307,12 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                       </td>
                       <td className="px-6 py-4 text-end">
                         <div className="flex items-center justify-end gap-2">
-                          <button onClick={() => openEditModal(c)} className="p-1 hover:text-blue-600"><Edit2 className="w-4 h-4" /></button>
-                          <button onClick={() => handleDelete(id)} className="p-1 hover:text-red-600"><Trash2 className="w-4 h-4" /></button>
+                          <button onClick={() => openEditModal(c)} className="p-1 hover:text-blue-600" title="Edit">
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => handleDelete(id)} className="p-1 hover:text-red-600" title="Delete">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -271,81 +324,188 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
         )}
       </div>
 
-      {/* Modal with Instructor Inputs */}
+      {/* Modal with Direct Instructor Photo Upload */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
             <div className="flex justify-between items-center pb-3 border-b border-gray-100">
-              <h3 className="font-bold text-gray-900">{editingCourse ? 'Edit Course & Instructor' : 'Add New Course'}</h3>
-              <button onClick={() => setIsModalOpen(false)}><X className="w-5 h-5 text-gray-400" /></button>
+              <h3 className="font-bold text-gray-900">
+                {editingCourse ? (isAr ? 'تعديل بيانات الورشة والمدرب' : 'Edit Course & Instructor') : (isAr ? 'إضافة ورشة ومدرب جديد' : 'Add New Course')}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)}>
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
             </div>
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-semibold mb-1">Title (English) *</label>
-                  <input required value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} className="w-full p-2 border rounded-lg" />
+                  <input
+                    required
+                    value={formData.titleEn}
+                    onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })}
+                    className="w-full p-2.5 border rounded-xl"
+                  />
                 </div>
                 <div>
                   <label className="block font-semibold mb-1">الاسم (بالعربية) *</label>
-                  <input required value={formData.titleAr} onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })} className="w-full p-2 border rounded-lg" />
+                  <input
+                    required
+                    value={formData.titleAr}
+                    onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
+                    className="w-full p-2.5 border rounded-xl"
+                  />
                 </div>
               </div>
 
-              {/* Instructor Fields */}
-              <div className="p-3.5 bg-indigo-50/60 rounded-2xl border border-indigo-100 space-y-3">
-                <span className="font-bold text-indigo-900 text-xs block">Instructor Details:</span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-semibold mb-1">Instructor Name (En) *</label>
-                    <input required value={formData.instructorNameEn} onChange={(e) => setFormData({ ...formData, instructorNameEn: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
-                  </div>
-                  <div>
-                    <label className="block font-semibold mb-1">اسم المدرب (عربي) *</label>
-                    <input required value={formData.instructorNameAr} onChange={(e) => setFormData({ ...formData, instructorNameAr: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
-                  </div>
-                </div>
+              {/* Instructor Details Section with Photo Upload */}
+              <div className="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-100 space-y-3">
+                <span className="font-bold text-indigo-900 text-xs block">
+                  {isAr ? 'بيانات وصورة المدرب المعتمد:' : 'Instructor Details & Photo:'}
+                </span>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-semibold mb-1">Instructor Title / Role</label>
-                    <input value={formData.instructorTitleEn} onChange={(e) => setFormData({ ...formData, instructorTitleEn: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
+                    <label className="block font-semibold mb-1">Instructor Name (En) *</label>
+                    <input
+                      required
+                      value={formData.instructorNameEn}
+                      onChange={(e) => setFormData({ ...formData, instructorNameEn: e.target.value })}
+                      className="w-full p-2 bg-white border rounded-xl"
+                    />
                   </div>
                   <div>
-                    <label className="block font-semibold mb-1">Photo Path (e.g. /0logo.png)</label>
-                    <input value={formData.instructorImage} onChange={(e) => setFormData({ ...formData, instructorImage: e.target.value })} className="w-full p-2 bg-white border rounded-lg" />
+                    <label className="block font-semibold mb-1">اسم المدرب (عربي) *</label>
+                    <input
+                      required
+                      value={formData.instructorNameAr}
+                      onChange={(e) => setFormData({ ...formData, instructorNameAr: e.target.value })}
+                      className="w-full p-2 bg-white border rounded-xl"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-semibold mb-1">Instructor Title / Role</label>
+                  <input
+                    value={formData.instructorTitleEn}
+                    onChange={(e) => setFormData({ ...formData, instructorTitleEn: e.target.value })}
+                    placeholder="e.g. Senior Leadership Coach"
+                    className="w-full p-2 bg-white border rounded-xl"
+                  />
+                </div>
+
+                {/* Upload Photo Directly From Device */}
+                <div className="pt-2 border-t border-indigo-100">
+                  <label className="block font-bold text-gray-800 mb-1.5">
+                    {isAr ? 'صورة المدرب من جهازك:' : 'Instructor Photo from Device:'}
+                  </label>
+
+                  <div className="flex items-center gap-4">
+                    {formData.instructorImage ? (
+                      <div className="relative w-14 h-14 rounded-2xl border border-indigo-200 overflow-hidden bg-white shrink-0 shadow-sm">
+                        <Image src={formData.instructorImage} alt="Instructor Preview" fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-14 h-14 rounded-2xl border border-dashed border-gray-300 flex items-center justify-center text-gray-400 bg-white shrink-0">
+                        <ImageIcon className="w-6 h-6" />
+                      </div>
+                    )}
+
+                    <div className="flex-1 space-y-1.5">
+                      <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer shadow-md transition-all">
+                        <Upload className="w-4 h-4" />
+                        <span>
+                          {uploadingImage
+                            ? isAr ? 'جاري رفع الصورة...' : 'Uploading...'
+                            : isAr ? 'اختر صورة المدرب من جهازك' : 'Choose Instructor Photo from Device'}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleFileUpload}
+                        />
+                      </label>
+                      <p className="text-[10px] text-gray-500">
+                        {isAr ? 'يدعم صور PNG, JPG, WEBP حتى 5MB' : 'Supports PNG, JPG, WEBP photos up to 5MB'}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div>
                 <label className="block font-semibold mb-1">Description (English) *</label>
-                <textarea rows={2} required value={formData.descriptionEn} onChange={(e) => setFormData({ ...formData, descriptionEn: e.target.value })} className="w-full p-2 border rounded-lg" />
+                <textarea
+                  rows={2}
+                  required
+                  value={formData.descriptionEn}
+                  onChange={(e) => setFormData({ ...formData, descriptionEn: e.target.value })}
+                  className="w-full p-2.5 border rounded-xl"
+                />
               </div>
 
               <div>
                 <label className="block font-semibold mb-1">الوصف (بالعربية) *</label>
-                <textarea rows={2} required value={formData.descriptionAr} onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })} className="w-full p-2 border rounded-lg" />
+                <textarea
+                  rows={2}
+                  required
+                  value={formData.descriptionAr}
+                  onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
+                  className="w-full p-2.5 border rounded-xl"
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
+                  <label className="block font-semibold mb-1">Category</label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value as CourseCategory })}
+                    className="w-full p-2.5 border rounded-xl"
+                  >
+                    <option value="stem_robotics">STEM & Robotics</option>
+                    <option value="leadership">Leadership & Public Speaking</option>
+                    <option value="creative_arts">Creative Arts & Design</option>
+                    <option value="outdoor_survival">Outdoor Survival</option>
+                  </select>
+                </div>
+                <div>
                   <label className="block font-semibold mb-1">Price (EGP) *</label>
-                  <input type="number" required value={formData.priceEGP} onChange={(e) => setFormData({ ...formData, priceEGP: Number(e.target.value) })} className="w-full p-2 border rounded-lg" />
+                  <input
+                    type="number"
+                    required
+                    value={formData.priceEGP}
+                    onChange={(e) => setFormData({ ...formData, priceEGP: Number(e.target.value) })}
+                    className="w-full p-2.5 border rounded-xl"
+                  />
                 </div>
                 <div>
                   <label className="block font-semibold mb-1">Age Group</label>
-                  <input value={formData.ageGroup} onChange={(e) => setFormData({ ...formData, ageGroup: e.target.value })} className="w-full p-2 border rounded-lg" />
-                </div>
-                <div>
-                  <label className="block font-semibold mb-1">Duration (Weeks)</label>
-                  <input type="number" value={formData.durationWeeks} onChange={(e) => setFormData({ ...formData, durationWeeks: Number(e.target.value) })} className="w-full p-2 border rounded-lg" />
+                  <input
+                    value={formData.ageGroup}
+                    onChange={(e) => setFormData({ ...formData, ageGroup: e.target.value })}
+                    className="w-full p-2.5 border rounded-xl"
+                  />
                 </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-100 rounded-lg">Cancel</button>
-                <button type="submit" className="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold">Save Course & Instructor</button>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-gray-100 rounded-xl font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md"
+                >
+                  Save Course & Instructor
+                </button>
               </div>
             </form>
           </div>
