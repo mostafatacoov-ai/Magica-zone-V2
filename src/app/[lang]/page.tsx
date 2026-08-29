@@ -6,7 +6,7 @@ import {
   Tent,
   GraduationCap,
   ShoppingBag,
-  Gamepad2,
+  Target,
   UtensilsCrossed,
   Mic2,
   Shirt,
@@ -17,6 +17,10 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { HeroVideo } from '@/components/modules/home/HeroVideo';
+
+// Force live data rendering on every request
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 interface SectorItem {
   id: string;
@@ -54,19 +58,19 @@ export default function HomePage({ params }: { params: { lang: string } }) {
       titleAr: "دورات وأكاديمية ماجيكا",
       taglineEn: "Tomorrow's Skills, Today",
       taglineAr: "مهارات الغد، اليوم",
-      descEn: "Junior CEO & Financial Literacy Academy, Robotics, and leadership tracks for young innovators.",
-      descAr: "أكاديمية الرئيس التنفيذي الصغير، الذكاء المالي، الروبوتات، والقيادة لرواد المستقبل.",
+      descEn: "Junior CEO & Financial Literacy Academy, Robotics, SAT/EST English, and leadership tracks for innovators.",
+      descAr: "أكاديمية الرئيس التنفيذي الصغير، الذكاء المالي، الروبوتات، واللغات والقيادة لرواد المستقبل.",
       offersEn: [
         "Leadership & Project Management",
         "E-Commerce & Digital Marketing",
         "Robotics & AI Mastery",
-        "Executive Coding Mindset",
+        "Executive Coding & Test Prep",
       ],
       offersAr: [
         "القيادة وإدارة المشاريع",
         "التجارة الإلكترونية والتسويق",
         "الروبوتات والذكاء الاصطناعي",
-        "عقلية البرمجة والابتكار",
+        "التأهيل الأكاديمي والبرمجة",
       ],
       ctaHref: `/${params.lang}/courses`,
       ctaTextEn: "Explore All Courses",
@@ -112,8 +116,8 @@ export default function HomePage({ params }: { params: { lang: string } }) {
       titleAr: "مستلزمات وأدوات ماجيكا",
       taglineEn: "Smart Executive CEO Gear",
       taglineAr: "حقائب وأدوات القادة الصغار",
-      descEn: "Ergonomic, water-resistant CEO school backpacks and experiment toolkits.",
-      descAr: "حقائب مدرسية تنفيذية طبية مقاومة للماء وأدوات ابتكار متطورة.",
+      descEn: "Ergonomic, water-resistant CEO school backpacks, facilitation kits, and experiment toolkits.",
+      descAr: "حقائب مدرسية تنفيذية طبية مقاومة للماء وأدوات ابتكار ومعدات ميدانية متطورة.",
       offersEn: [
         "Executive CEO School Backpacks",
         "Dedicated Tech & Tablet Sleeves",
@@ -126,38 +130,38 @@ export default function HomePage({ params }: { params: { lang: string } }) {
         "دعامة طبية لحماية الظهر",
         "أقمشة فائقة التحمل",
       ],
-      ctaHref: `/${params.lang}/bazar`,
+      ctaHref: `/${params.lang}/supplies`,
       ctaTextEn: "Explore Smart Supplies",
       ctaTextAr: "استكشف الحقائب والأدوات",
     },
     {
-      id: "games",
-      icon: Gamepad2,
+      id: "events",
+      icon: Target,
       printImg: "/magica-games-print.png",
       borderColor: "border-[#9333EA]/40",
       badgeBg: "bg-[#9333EA]/10 text-[#9333EA]",
       btnBg: "bg-[#9333EA] hover:bg-[#7E22CE]",
-      titleEn: "Magica Mind Games",
-      titleAr: "ألعاب وفعاليات ماجيكا",
-      taglineEn: "Play, Think & Grow Your IQ",
-      taglineAr: "العب، فكّر، وطوّر ذكاءك",
-      descEn: "Merchant logic, margin mastery, and negotiation quests that sharpen real-world analytical skills.",
-      descAr: "منطق التاجر، احتراف هوامش الربح، ومغامرات التفاوض التي تصقل الذكاء التحليلي.",
+      titleEn: "Magica Events & Activities",
+      titleAr: "فعاليات وأنشطة ماجيكا",
+      taglineEn: "37 Interactive Turnkey Games",
+      taglineAr: "37 لعبة وفعالية تفاعلية",
+      descEn: "Turnkey team building games, corporate floatable challenges, and youth sports activities with live package calculator.",
+      descAr: "ألعاب بناء فرق عمل متكاملة، تحديات هوائية للشركات، وفعاليات شبابية مع حاسبة باقات تفاعلية.",
       offersEn: [
-        "Analytical Logic Challenges",
-        "Live Trading Simulator",
-        "Cooperative Problem Puzzles",
-        "Dynamic Points System",
+        "17 Youth & Kids Team Building Games",
+        "20 Corporate Floatable & Inflatable Arenas",
+        "Certified Safety Facilitators & Equipment",
+        "Instant Multi-Activity Package Calculator",
       ],
       offersAr: [
-        "تحديات المنطق والذكاء",
-        "محاكي التداول والتبادل التجاري",
-        "ألغاز حل المشكلات التعاونية",
-        "نظام نقاط ومكافآت",
+        "17 لعبة لبناء فرق الأطفال والشباب",
+        "20 ملعب وتحدي هوائي عائم للشركات",
+        "مدربون معتمدون ومعدات آمنة بالكامل",
+        "حاسبة باقات فورية بخصومات 10% و15%",
       ],
       ctaHref: `/${params.lang}/activities`,
-      ctaTextEn: "Explore Mind Games & Activities",
-      ctaTextAr: "استكشف ألعاب الذكاء والفعاليات",
+      ctaTextEn: "Explore Events & Activities",
+      ctaTextAr: "استكشف الفعاليات وحاسبة الباقات",
     },
     {
       id: "bazar",
@@ -271,7 +275,7 @@ export default function HomePage({ params }: { params: { lang: string } }) {
         "قطن مسامي مضاد للتعرق",
         "مقاسات لكافة الفئات العمرية",
       ],
-      ctaHref: `/${params.lang}/bazar`,
+      ctaHref: `/${params.lang}/uniform`,
       ctaTextEn: "Explore Apparel",
       ctaTextAr: "استكشف اليونيفورم الرسمي",
     },
@@ -308,12 +312,10 @@ export default function HomePage({ params }: { params: { lang: string } }) {
 
   return (
     <div className="space-y-20 pb-20">
-      {/* Hero Section with Live Background Video */}
+      {/* Hero Section with Ambient Video */}
       <section className="relative overflow-hidden min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center pt-20 pb-24 sm:pt-28 sm:pb-32 border-b border-amber-100/80">
-        {/* Background Video Player */}
         <HeroVideo />
 
-        {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-amber-100/90 text-amber-900 shadow-sm backdrop-blur-sm">
             <Sparkles className="w-4 h-4 text-amber-600" />
@@ -400,7 +402,7 @@ export default function HomePage({ params }: { params: { lang: string } }) {
         </div>
       </section>
 
-      {/* The 9 Sectors Showcase with Print Art Graphics & Colors */}
+      {/* The 9 Sectors Showcase */}
       <section id="sectors" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs font-black text-blue-700 bg-blue-100/70 px-4 py-1.5 rounded-full uppercase tracking-wider">
@@ -409,7 +411,7 @@ export default function HomePage({ params }: { params: { lang: string } }) {
           <h2 className="text-3xl sm:text-5xl font-black text-gray-900">
             {isAr ? "استكشف كافة قطاعات ماجيكا وعروضنا" : "Discover All Magica Sectors & What We Offer"}
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600">
+          <p className="text-xs sm:text-sm text-gray-600 font-medium">
             {isAr
               ? "تصفح قطاعاتنا الـ 9 المتخصصة لاكتشاف البرامج، المنتجات، والأناشيد الصوتية مع روابط حية لكل قسم:"
               : "Explore our 9 specialized divisions below to discover core offerings along with live previews and soundtracks:"}
@@ -434,13 +436,7 @@ export default function HomePage({ params }: { params: { lang: string } }) {
                   {/* Top Graphic + Badge */}
                   <div className="flex items-center justify-between gap-3">
                     <div className="relative w-14 h-14 shrink-0 rounded-2xl bg-amber-50/60 p-2 border border-gray-100 flex items-center justify-center overflow-hidden">
-                      <Image
-                        src={sector.printImg}
-                        alt={title}
-                        width={48}
-                        height={48}
-                        className="object-contain w-full h-full"
-                      />
+                      <Icon className="w-6 h-6 text-gray-700" />
                     </div>
 
                     <span className={`text-[11px] font-black px-3 py-1 rounded-full ${sector.badgeBg}`}>
@@ -469,11 +465,11 @@ export default function HomePage({ params }: { params: { lang: string } }) {
                   </div>
                 </div>
 
-                {/* Bottom CTA with Brand Color */}
+                {/* Bottom Action Button */}
                 <div className="pt-4 border-t border-gray-100">
                   <Link
                     href={sector.ctaHref}
-                    className={`inline-flex items-center justify-between w-full py-3 px-4 text-xs font-black text-white ${sector.btnBg} rounded-2xl transition-all shadow-md`}
+                    className={`inline-flex items-center justify-between w-full py-3.5 px-4 text-xs font-black text-white ${sector.btnBg} rounded-2xl transition-all shadow-md`}
                   >
                     <span>{ctaText}</span>
                     <ArrowIcon className="w-4 h-4" />
