@@ -7,7 +7,7 @@ import { RadioTrack } from '@/lib/models/RadioTrack';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// 17 KIDS & YOUTH GAMES
+// 1. ALL 17 YOUTH & KIDS ACTIVITIES (From Proposal Presentation)
 const youthActivities = [
   {
     titleEn: 'Birthday Lineup',
@@ -283,7 +283,7 @@ const youthActivities = [
   },
 ];
 
-// 20 CORPORATE FLOATABLE & INFLATABLE GAMES
+// 2. ALL 20 CORPORATE FLOATABLE & INFLATABLE GAMES (From Floatable Catalog)
 const floatableActivities = [
   {
     titleEn: 'Bossaball Inflatable Arena',
@@ -609,47 +609,7 @@ const floatableActivities = [
 
 const all37Activities = [...youthActivities, ...floatableActivities];
 
-// Products List
-const defaultProducts = [
-  {
-    nameEn: 'Magica Executive CEO School Bag #1',
-    nameAr: 'حقيبة ماجيكا التنفيذية #1 للطلاب القادة',
-    descriptionEn: 'Waterproof ergonomic school backpack with dedicated padded tablet compartment and spine support cushion.',
-    descriptionAr: 'حقيبة مدرسية تنفيذية طبية مقاومة للماء مع جيب مبطن للتابلت ودعامة مريحة للظهر.',
-    category: 'event_supplies',
-    priceEGP: 1250,
-    imageUrl: '/supplies/bag1.png',
-    inStock: true,
-    featuresEn: ['Ergonomic Spine Support', 'Water-Resistant Heavy-Duty Fabric', 'Dedicated Laptop/Tablet Sleeve'],
-    featuresAr: ['دعامة طبية لحماية الظهر', 'أقمشة فائقة التحمل ومقاومة للماء', 'جيب مخصص للتابلت'],
-  },
-  {
-    nameEn: 'Magica Official Explorer Polo & Cap Set',
-    nameAr: 'طقم بولو وكاب المستكشف الرسمي',
-    descriptionEn: 'High-breathability 100% active cotton polo shirt and branded cap designed for young leaders.',
-    descriptionAr: 'تيشيرت بولو قطن 100% مسامي مريح مع كاب واقي من الشمس.',
-    category: 'uniforms',
-    priceEGP: 450,
-    imageUrl: '/uniform/polo.png',
-    inStock: true,
-    featuresEn: ['100% Breathable Cotton', 'Includes Sun Visor Cap', 'Custom School/Team Logo Printing'],
-    featuresAr: ['قطن 100% مريح ومسامي', 'يشمل كاب واقي من الشمس', 'إمكانية طباعة الشعار'],
-  },
-  {
-    nameEn: 'Team Facilitation & Field Activity Kit',
-    nameAr: 'حقيبة أدوات ومعدات بناء الفرق الميدانية',
-    descriptionEn: 'Comprehensive facilitator kit including elastic ropes, marker cones, blindfolds, and team bands for 50 participants.',
-    descriptionAr: 'حقيبة متكاملة للمدربين تشمل حبال مطاطية، أقماع تحديد، عصابات أعين، وأشرطة تمييز لـ 50 مشارك.',
-    category: 'event_supplies',
-    priceEGP: 2800,
-    imageUrl: '/magica-Supplies-print.png',
-    inStock: true,
-    featuresEn: ['Complete Gear for 50+ Players', 'Durable Weatherproof Bag', 'Activity Guide Included'],
-    featuresAr: ['معدات متكاملة لأكثر من 50 لاعب', 'حقيبة متينة ومقاومة للعوامل الجوية', 'دليل إرشادي مطبوع للأنشطة'],
-  },
-];
-
-// Courses
+// 3. COURSES WITH INSTRUCTORS
 const defaultCourses = [
   {
     titleEn: 'Creative STEM & Structural Prototyping',
@@ -693,9 +653,30 @@ const defaultCourses = [
     scheduleAr: 'الجمعة والاثنين (5:00 مساءً - 7:00 مساءً)',
     isActive: true,
   },
+  {
+    titleEn: 'Outdoor Survival & Scout Skills',
+    titleAr: 'دورة المهارات الكشفية والحياة البرية',
+    descriptionEn: 'Field skills masterclass covering compass navigation, emergency shelter building, knot tying, and team orienteering.',
+    descriptionAr: 'دورة عملية تغطي الملاحة بالبوصلة، بناء الملاجئ الطارئة، العقد الكشفية، وإدارة الفريق في الطبيعة.',
+    category: 'outdoor_survival',
+    ageGroup: '9 - 15 Years',
+    durationWeeks: 2,
+    sessionsCount: 4,
+    priceEGP: 1800,
+    instructorNameEn: 'Capt. Tarek Nour',
+    instructorNameAr: 'كابتن طارق نور',
+    instructorTitleEn: 'Field Expedition & Scout Master',
+    instructorTitleAr: 'خبير المغامرات الكشفية والبيئية',
+    instructorImage: '/0logo.png',
+    syllabusEn: ['Topography & Map Reading', 'Advanced Knot Mechanics', 'Outdoor Safety & First Aid', 'Wilderness Challenge'],
+    syllabusAr: ['قراءة الخرائط والملاحة', 'ميكانيكا العقد والربط', 'الإسعافات الأولية والسلامة', 'تحدي التوجيه في الميدان'],
+    scheduleEn: 'Fridays (10:00 AM - 2:00 PM)',
+    scheduleAr: 'أيام الجمعة (10:00 صباحاً - 2:00 ظهراً)',
+    isActive: true,
+  },
 ];
 
-// Radio Tracks
+// 4. RADIO TRACKS
 const defaultRadioTracks = [
   {
     titleEn: 'Level Up Your World',
@@ -730,45 +711,173 @@ const defaultRadioTracks = [
     isActive: true,
     order: 3,
   },
+  {
+    titleEn: 'Magica Magic',
+    titleAr: 'سحر ماجيكا',
+    artistEn: 'Magica Beats & Rhythms',
+    artistAr: 'إيقاعات ماجيكا',
+    category: 'song',
+    duration: '2:43',
+    audioSrc: '/audio/Magica Magic.mp3',
+    isActive: true,
+    order: 4,
+  },
+  {
+    titleEn: 'Ready for the Week',
+    titleAr: 'جاهزون لأسبوع المغامرة',
+    artistEn: 'Field Facilitators',
+    artistAr: 'ميسرو الأنشطة الميدانية',
+    category: 'chant',
+    duration: '2:50',
+    audioSrc: '/audio/Magica Ready for the Week.mp3',
+    isActive: true,
+    order: 5,
+  },
+  {
+    titleEn: 'Magica Rising',
+    titleAr: 'انطلاقة ماجيكا الحماسية',
+    artistEn: 'Morning Hype Crew',
+    artistAr: 'هتاف الصباح الحماسي',
+    category: 'chant',
+    duration: '0:31',
+    audioSrc: '/audio/Magica Rising.mp3',
+    isActive: true,
+    order: 6,
+  },
+  {
+    titleEn: 'Own the Court',
+    titleAr: 'امتلك الميدان والملعب',
+    artistEn: 'Sports & Team Dynamism',
+    artistAr: 'فريق الأنشطة الرياضية',
+    category: 'chant',
+    duration: '0:31',
+    audioSrc: '/audio/Own the Court.mp3',
+    isActive: true,
+    order: 7,
+  },
 ];
 
 async function handleSeed() {
   try {
     await connectToDatabase();
 
-    // 1. Delete and insert all 37 activities
+    // 1. Scan public/supplies and public/uniform on disk
+    const suppliesDir = path.join(process.cwd(), 'public', 'supplies');
+    const uniformDir = path.join(process.cwd(), 'public', 'uniform');
+
+    const suppliesFiles = fs.existsSync(suppliesDir)
+      ? fs.readdirSync(suppliesDir).filter((f) => /\.(png|jpe?g|webp|avif|gif)$/i.test(f))
+      : [];
+
+    const uniformFiles = fs.existsSync(uniformDir)
+      ? fs.readdirSync(uniformDir).filter((f) => /\.(png|jpe?g|webp|avif|gif)$/i.test(f))
+      : [];
+
+    // Realistic price list & titles for bags
+    const suppliesPriceTiers = [1250, 1100, 1400, 950, 1350, 1200, 1500, 850];
+    const uniformPriceTiers = [450, 650, 550, 750, 480, 620, 800, 520];
+
+    // Generate product for every single photo in public/supplies/
+    const generatedSuppliesProducts = suppliesFiles.map((file, idx) => ({
+      nameEn: `Magica Executive CEO Backpack #${idx + 1}`,
+      nameAr: `حقيبة ماجيكا التنفيذية الذكية #${idx + 1}`,
+      descriptionEn: 'Waterproof ergonomic school backpack with dedicated padded tablet compartment and spine support cushion.',
+      descriptionAr: 'حقيبة مدرسية تنفيذية طبية مقاومة للماء مع جيب مبطن للتابلت ودعامة مريحة للظهر والعمود الفقري.',
+      category: 'event_supplies',
+      priceEGP: suppliesPriceTiers[idx % suppliesPriceTiers.length],
+      imageUrl: `/supplies/${file}`,
+      inStock: true,
+      featuresEn: ['Ergonomic Spine Support', 'Water-Resistant Heavy-Duty Fabric', 'Dedicated Laptop/Tablet Sleeve'],
+      featuresAr: ['دعامة طبية لحماية الظهر', 'أقمشة فائقة التحمل ومقاومة للماء', 'جيب مخصص ومبطن للتابلت'],
+    }));
+
+    // Generate product for every single photo in public/uniform/
+    const generatedUniformProducts = uniformFiles.map((file, idx) => ({
+      nameEn: idx === 0 ? 'Magica Official Explorer Polo & Cap Set' : `Magica Junior Founder Premium Apparel #${idx + 1}`,
+      nameAr: idx === 0 ? 'طقم بولو وكاب المستكشف الرسمي' : `يونيفورم وهودي ماجيكا الفاخر #${idx + 1}`,
+      descriptionEn: 'High-breathability 100% active cotton apparel designed for school leadership and camp activities.',
+      descriptionAr: 'يونيفورم قطن 100% مسامي مريح مصمم للمدارس والفعاليات الميدانية.',
+      category: 'uniforms',
+      priceEGP: uniformPriceTiers[idx % uniformPriceTiers.length],
+      imageUrl: `/uniform/${file}`,
+      inStock: true,
+      featuresEn: ['100% Breathable Cotton', 'Comfort Fit for All Ages', 'Official Embroidered Badge'],
+      featuresAr: ['قطن 100% مريح ومسامي', 'مقاسات لكافة المراحل العمرية', 'تطريز شعار ماجيكا الفاخر'],
+    }));
+
+    // Additional essential gear products
+    const additionalGearProducts = [
+      {
+        nameEn: 'Team Facilitation & Field Activity Kit',
+        nameAr: 'حقيبة أدوات ومعدات بناء الفرق الميدانية',
+        descriptionEn: 'Comprehensive facilitator kit including elastic ropes, marker cones, blindfolds, and team bands for 50 participants.',
+        descriptionAr: 'حقيبة متكاملة للمدربين تشمل حبال مطاطية، أقماع تحديد، عصابات أعين، وأشرطة تمييز لـ 50 مشارك.',
+        category: 'event_supplies',
+        priceEGP: 2800,
+        imageUrl: suppliesFiles.length > 0 ? `/supplies/${suppliesFiles[0]}` : '/magica-Supplies-print.png',
+        inStock: true,
+        featuresEn: ['Complete Gear for 50+ Players', 'Durable Weatherproof Bag', 'Activity Guide Included'],
+        featuresAr: ['معدات متكاملة لأكثر من 50 لاعب', 'حقيبة متينة ومقاومة للعوامل الجوية', 'دليل إرشادي مطبوع للأنشطة'],
+      },
+      {
+        nameEn: 'Insulated Stainless Steel Sports Water Bottle',
+        nameAr: 'زجاجة مياه رياضية ستانلس ستيل معزولة',
+        descriptionEn: 'BPA-free stainless steel double-walled water bottle (750ml) with spill-proof straw lid.',
+        descriptionAr: 'زجاجة مياه ستانلس ستيل معزولة خالية من مادة BPA سعة 750 مل مع غطاء مانع للتسرب.',
+        category: 'camp_gear',
+        priceEGP: 320,
+        imageUrl: suppliesFiles.length > 1 ? `/supplies/${suppliesFiles}` : '/magica-Supplies-print.png',
+        inStock: true,
+        featuresEn: ['750ml Capacity', 'Keeps Cold for 24 Hours', 'BPA-Free Eco Friendly'],
+        featuresAr: ['سعة 750 مل', 'تحفظ البرودة لمدة 24 ساعة', 'صديقة للبيئة وخالية من BPA'],
+      },
+      {
+        nameEn: 'Magica Achievement Medals & Badges (Pack of 30)',
+        nameAr: 'ميداليات وشارات التميز التذكارية (30 قطعة)',
+        descriptionEn: 'Pack of 30 custom gold, silver, and bronze finish achievement medals with woven lanyards.',
+        descriptionAr: 'مجموعة من 30 ميدالية وشارة تميز تذكارية للمشاركين في الفعاليات والمسابقات.',
+        category: 'souvenirs',
+        priceEGP: 950,
+        imageUrl: '/magica-Supplies-print.png',
+        inStock: true,
+        featuresEn: ['Pack of 30 Medals', 'Custom Engraving Available', 'Premium Ribbon Included'],
+        featuresAr: ['عبوة تحتوي على 30 ميدالية', 'إمكانية الحفر المخصص', 'شريط تعليق عالي الجودة'],
+      },
+    ];
+
+    // Combine all products
+    const allProducts = [
+      ...generatedSuppliesProducts,
+      ...generatedUniformProducts,
+      ...additionalGearProducts,
+    ];
+
+    // 2. Clear and Insert all collections
     await Activity.deleteMany({});
-    const insertedActivities = await Activity.insertMany(all37Activities);
+    await Product.deleteMany({});
+    await Course.deleteMany({});
+    await RadioTrack.deleteMany({});
 
-    // 2. Insert Products if empty
-    const productCount = await Product.countDocuments();
-    let insertedProducts = [];
-    if (productCount === 0) {
-      insertedProducts = await Product.insertMany(defaultProducts);
-    }
-
-    // 3. Insert Courses if empty
-    const courseCount = await Course.countDocuments();
-    let insertedCourses = [];
-    if (courseCount === 0) {
-      insertedCourses = await Course.insertMany(defaultCourses);
-    }
-
-    // 4. Insert Radio if empty
-    const radioCount = await RadioTrack.countDocuments();
-    let insertedTracks = [];
-    if (radioCount === 0) {
-      insertedTracks = await RadioTrack.insertMany(defaultRadioTracks);
-    }
+    const seededActivities = await Activity.insertMany(all37Activities);
+    const seededProducts = await Product.insertMany(allProducts);
+    const seededCourses = await Course.insertMany(defaultCourses);
+    const seededTracks = await RadioTrack.insertMany(defaultRadioTracks);
 
     return NextResponse.json({
       success: true,
-      message: 'All 37 activities successfully seeded into MongoDB!',
-      activitiesCount: insertedActivities.length,
-      youthActivitiesCount: youthActivities.length,
-      floatableActivitiesCount: floatableActivities.length,
-      existingProducts: productCount || insertedProducts.length,
-      existingCourses: courseCount || insertedCourses.length,
+      message: 'Successfully seeded all 37 activities, all supplies photos, and all uniforms photos into MongoDB!',
+      importedPhotos: {
+        suppliesCount: suppliesFiles.length,
+        suppliesFiles,
+        uniformCount: uniformFiles.length,
+        uniformFiles,
+      },
+      summary: {
+        totalActivities: seededActivities.length,
+        totalProducts: seededProducts.length,
+        totalCourses: seededCourses.length,
+        totalRadioTracks: seededTracks.length,
+      },
     });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
