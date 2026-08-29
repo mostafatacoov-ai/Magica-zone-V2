@@ -1,7 +1,0 @@
-# BEGIN Next.js static routing for Hostinger
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^_next/static/(.*)$ .next/static/$1 [L]
-</IfModule>
-# END Next.js static routing
