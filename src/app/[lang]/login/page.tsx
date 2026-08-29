@@ -29,7 +29,11 @@ export default function LoginPage({ params }: { params: { lang: string } }) {
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || 'Login failed');
 
-      router.push(`/${params.lang}/dashboard`);
+      if (json.data?.role === 'admin' || json.user?.role === 'admin') {
+        router.push(`/${params.lang}/admin`);
+      } else {
+        router.push(`/${params.lang}/dashboard`);
+      }
       router.refresh();
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
