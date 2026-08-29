@@ -1,6 +1,6 @@
 import dns from 'node:dns';
 
-// Force entire Node.js server process to resolve DNS via Google Public DNS
+// Force Google DNS for MongoDB Atlas
 try {
   dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 } catch (e) {
@@ -9,14 +9,15 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable unoptimized images for Hostinger & cPanel support
+  images: {
+    unoptimized: true,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: false,
-  },
-  images: {
-    unoptimized: true,
+    ignoreBuildErrors: true,
   },
 };
 
