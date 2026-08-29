@@ -16,15 +16,15 @@ export async function POST(req: NextRequest) {
       eventDate: validatedData.eventDate ? new Date(validatedData.eventDate) : undefined,
     });
 
-    // Send automated email notifications asynchronously
+    // Send email notifications asynchronously without blocking the user response
     sendInquiryEmails(newInquiry.toObject()).catch((err) =>
-      console.warn('[Email Trigger Warning]', err)
+      console.warn('[Email Notification Notice]', err.message)
     );
 
     return NextResponse.json(
       {
         success: true,
-        message: 'Inquiry submitted successfully',
+        message: 'Reservation submitted successfully',
         data: newInquiry,
       },
       { status: 201 }
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { success: false, errors: error.flatten().fieldErrors },
+        { success: false, errors: error.flatten().fieldErrors, message: 'Invalid data format' },
         { status: 400 }
       );
     }
