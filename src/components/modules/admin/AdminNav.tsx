@@ -15,6 +15,7 @@ import {
   Shirt,
   LogOut,
   ShieldAlert,
+  Tent,
 } from 'lucide-react';
 
 export function AdminNav({ lang }: { lang: string }) {
@@ -23,16 +24,17 @@ export function AdminNav({ lang }: { lang: string }) {
   const isAr = lang === 'ar';
 
   const crmSections = [
-    { href: `/${lang}/admin`, label: isAr ? 'لوحة المبيعات وCRM' : 'CRM & Inquiries', icon: LayoutDashboard },
-    { href: `/${lang}/admin/activities`, label: isAr ? 'الألعاب والفعاليات' : 'Events & Activities', icon: Sparkles },
-    { href: `/${lang}/admin/courses`, label: isAr ? 'الأكاديمية والمدربين' : 'Courses & Instructors', icon: GraduationCap },
-    { href: `/${lang}/admin/supplies`, label: isAr ? 'الحقائب والمستلزمات' : 'Supplies & Bags', icon: Backpack },
-    { href: `/${lang}/admin/uniform`, label: isAr ? 'اليونيفورم والملابس' : 'Uniforms', icon: Shirt },
-    { href: `/${lang}/admin/bazar`, label: isAr ? 'متاجر البازار' : 'Bazar Store', icon: ShoppingBag },
-    { href: `/${lang}/admin/users`, label: isAr ? 'الموظفون والأدوار' : 'Staff & Roles', icon: Users },
-    { href: `/${lang}/admin/assignments`, label: isAr ? 'تقييم الواجبات' : 'Assignments Review', icon: FileCheck },
-    { href: `/${lang}/admin/radio`, label: isAr ? 'راديو البث المباشر' : 'Radio & Music', icon: Radio },
-  ];
+  { href: `/${lang}/admin`, label: isAr ? 'لوحة المبيعات وCRM' : 'CRM & Inquiries', icon: LayoutDashboard },
+  { href: `/${lang}/admin/camp`, label: isAr ? 'معسكرات وصور الكامب' : 'Camp Programs & Photos', icon: Tent },
+  { href: `/${lang}/admin/activities`, label: isAr ? 'الألعاب والفعاليات' : 'Events & Activities', icon: Sparkles },
+  { href: `/${lang}/admin/courses`, label: isAr ? 'الأكاديمية والمدربين' : 'Courses & Instructors', icon: GraduationCap },
+  { href: `/${lang}/admin/supplies`, label: isAr ? 'الحقائب والمستلزمات' : 'Supplies & Bags', icon: Backpack },
+  { href: `/${lang}/admin/uniform`, label: isAr ? 'اليونيفورم والملابس' : 'Uniforms', icon: Shirt },
+  { href: `/${lang}/admin/bazar`, label: isAr ? 'متاجر البازار' : 'Bazar Store', icon: ShoppingBag },
+  { href: `/${lang}/admin/users`, label: isAr ? 'الموظفون والأدوار' : 'Staff & Roles', icon: Users },
+  { href: `/${lang}/admin/assignments`, label: isAr ? 'تقييم الواجبات' : 'Assignments Review', icon: FileCheck },
+  { href: `/${lang}/admin/radio`, label: isAr ? 'راديو البث المباشر' : 'Radio & Music', icon: Radio },
+];
 
   const handleAdminLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
