@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { FoodMenu } from '@/components/modules/food/FoodMenu';
 import { Utensils, ShieldCheck, HeartPulse, Award } from 'lucide-react';
@@ -33,7 +31,6 @@ export default function FoodPage({ params }: { params: { lang: string } }) {
 
     return (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-            {/* Header Banner */}
             <section className="text-center max-w-3xl mx-auto space-y-4">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
                     <Utensils className="w-4 h-4 text-amber-600" />
@@ -49,7 +46,6 @@ export default function FoodPage({ params }: { params: { lang: string } }) {
                 </p>
             </section>
 
-            {/* Safety & Hygiene Standards */}
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {standards.map((st, idx) => {
                     const Icon = st.icon;
@@ -65,7 +61,6 @@ export default function FoodPage({ params }: { params: { lang: string } }) {
                 })}
             </section>
 
-            {/* Interactive Food Menu & Calculator */}
             <FoodMenu lang={params.lang} />
         </main>
     );
