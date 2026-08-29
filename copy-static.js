@@ -1,39 +1,35 @@
 const fs = require('fs');
 const path = require('path');
 
-const src = path.join(__dirname, '.next', 'static');
-const dest = path.join(__dirname, 'public', '_next', 'static');
+function copyDirRecursive(src, dest) {
+  if (!fs.existsSync(src)) return;
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
 
-function copyRecursiveSync(src, dest) {
-  const exists = fs.existsSync(src);
-  const stats = exists && fs.statSync(src);
-  const isDirectory = exists && stats.isDirectory();
-  if (isDirectory) {
-    if (!fs.existsSync(dest)) {
-      fs.mkdirSync(dest, { recursive: true });
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (let entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirRecursive(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
     }
-    fs.readdirSync(src).forEach(function(childItemName) {
-      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
-    });
-  } else {
-    fs.copyFileSync(src, dest);
   }
 }
 
-try {
-  // Remove the old directory if it exists to prevent stale files
-  if (fs.existsSync(dest)) {
-    fs.rmSync(dest, { recursive: true, force: true });
-  }
-  
-  if (fs.existsSync(src)) {
-    // Copy the new static files safely across any Node version
-    copyRecursiveSync(src, dest);
-    console.log('✅ Successfully copied .next/static to public/_next/static for Hostinger compatibility.');
-  } else {
-    console.warn('⚠️ .next/static does not exist. Did Next.js build correctly?');
-  }
-} catch (error) {
-  console.error('❌ Error copying static files:', error);
-  process.exit(1); // Fail the build so we know if this script breaks
-}
+const root = process.cwd();
+const nextStatic = path.join(root, '.next', 'static');
+
+// 1. Copy into public/_next/static (Accessible directly by Apache without dot-folder blocks)
+const publicNextStatic = path.join(root, 'public', '_next', 'static');
+copyDirRecursive(nextStatic, publicNextStatic);
+
+// 2. Copy into root _next/static
+const rootNextStatic = path.join(root, '_next', 'static');
+copyDirRecursive(nextStatic, rootNextStatic);
+
+console.log('✅ Successfully copied .next/static to public/_next/static for Hostinger');
