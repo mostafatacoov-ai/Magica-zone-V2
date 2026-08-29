@@ -9,6 +9,10 @@ export async function GET() {
     if (!session) {
       return NextResponse.json({ success: false, user: null }, { status: 200 });
     }
+    
+    if (session.userId === 'master-admin-01') {
+      return NextResponse.json({ success: true, user: { _id: 'master-admin-01', name: session.name, email: session.email, role: session.role } });
+    }
 
     await connectToDatabase();
     const user = await User.findById(session.userId).select('-passwordHash').lean();

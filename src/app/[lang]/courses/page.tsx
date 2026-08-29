@@ -5,6 +5,8 @@ import { CourseCard } from '@/components/modules/courses/CourseCard';
 import { ICourse } from '@/types';
 import { GraduationCap } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 async function getCourses(): Promise<ICourse[]> {
   try {
     await connectToDatabase();
