@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db/mongodb';
 import { Activity } from '@/lib/models/Activity';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -11,11 +13,14 @@ export async function GET(req: NextRequest) {
     const filter = all ? {} : { isActive: true };
     const activities = await Activity.find(filter).sort({ createdAt: -1 }).lean();
 
-    return NextResponse.json({
-      success: true,
-      data: activities,
-      count: activities.length,
-    });
+    return NextResponse.json(
+      { success: true, data: activities, count: activities.length },
+      {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      }
+    );
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

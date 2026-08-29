@@ -74,20 +74,20 @@ export default function AdminActivitiesPage({ params }: { params: { lang: string
   const openEditModal = (act: IActivity) => {
     setEditingActivity(act);
     setFormData({
-      titleEn: act.titleEn,
-      titleAr: act.titleAr,
-      descriptionEn: act.descriptionEn,
-      descriptionAr: act.descriptionAr,
-      category: act.category,
-      ageRange: act.ageRange,
-      durationMinutes: act.durationMinutes,
-      participantsMin: act.participantsMin,
-      participantsMax: act.participantsMax,
+      titleEn: act.titleEn ?? '',
+      titleAr: act.titleAr ?? '',
+      descriptionEn: act.descriptionEn ?? '',
+      descriptionAr: act.descriptionAr ?? '',
+      category: act.category ?? 'kids_youth',
+      ageRange: act.ageRange ?? '6+',
+      durationMinutes: act.durationMinutes ?? 20,
+      participantsMin: act.participantsMin ?? 4,
+      participantsMax: act.participantsMax ?? 20,
       pricePerDayEGP: act.pricePerDayEGP ?? 6000,
       benefitsEn: act.benefitsEn ? act.benefitsEn.join(', ') : '',
       benefitsAr: act.benefitsAr ? act.benefitsAr.join(', ') : '',
       imageUrl: act.imageUrl || '/magica-games-print.png',
-      isActive: act.isActive,
+      isActive: act.isActive ?? true,
     });
     setIsModalOpen(true);
   };

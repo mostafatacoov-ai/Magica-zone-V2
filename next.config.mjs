@@ -1,6 +1,5 @@
 import dns from 'node:dns';
 
-// Force Google DNS for MongoDB Atlas
 try {
   dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 } catch (e) {
@@ -9,7 +8,6 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable unoptimized images for Hostinger & cPanel support
   images: {
     unoptimized: true,
   },
@@ -19,6 +17,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  reactStrictMode: false,
+  poweredByHeader: false,
 };
 
 export default nextConfig;
