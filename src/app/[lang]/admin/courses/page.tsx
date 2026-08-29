@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ICourse, CourseCategory } from '@/types';
 import { AdminNav } from '@/components/modules/admin/AdminNav';
+import { processImageFile } from '@/lib/imageUpload';
 import {
   Plus,
   Edit2,
@@ -13,7 +14,7 @@ import {
   X,
   Upload,
   UserCheck,
-  Image as ImageIcon,
+  ImageIcon,
 } from 'lucide-react';
 
 export default function AdminCoursesPage({ params }: { params: { lang: string } }) {
@@ -69,23 +70,13 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
     if (!file) return;
 
     setUploadingImage(true);
-    const data = new FormData();
-    data.append('file', file);
-    data.append('folder', 'instructors');
-
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: data,
-      });
-      const json = await res.json();
-      if (json.success) {
-        setFormData((prev) => ({ ...prev, instructorImage: json.url }));
-      } else {
-        alert(json.message || 'Upload failed');
-      }
+      // Compress and convert to Base64 (stores permanently in MongoDB without server filesystem issues)
+      const base64Url = await processImageFile(file, 600, 600, 0.85);
+      setFormData((prev) => ({ ...prev, instructorImage: base64Url }));
     } catch (err) {
-      console.error('Upload error', err);
+      console.error('Upload processing error', err);
+      alert(isAr ? 'تعذر قراءة الصورة، يرجى المحاولة مرة أخرى' : 'Failed to process image');
     } finally {
       setUploadingImage(false);
     }
@@ -272,6 +263,8 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
               <tbody className="divide-y divide-gray-100">
                 {filtered.map((c) => {
                   const id = (c.id || (c as any)._id) as string;
+                  const isBase64 = c.instructorImage?.startsWith('data:');
+
                   return (
                     <tr key={id} className="hover:bg-gray-50/70 transition-colors">
                       <td className="px-6 py-4">
@@ -279,11 +272,25 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                         <div className="text-gray-500 text-[11px]">{c.titleAr}</div>
                       </td>
 
-                      {/* Instructor Avatar & Name */}
+                      {/* Instructor Avatar Thumbnail */}
                       <td className="px-6 py-4 flex items-center gap-3">
-                        <div className="relative w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 overflow-hidden shrink-0 flex items-center justify-center">
+                        <div className="relative w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-100 overflow-hidden shrink-0 flex items-center justify-center">
                           {c.instructorImage ? (
-                            <Image src={c.instructorImage} alt={c.instructorNameEn} fill className="object-cover" />
+                            isBase64 ? (
+                              <img
+                                src={c.instructorImage}
+                                alt={c.instructorNameEn}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <Image
+                                src={c.instructorImage}
+                                alt={c.instructorNameEn}
+                                fill
+                                sizes="44px"
+                                className="object-cover"
+                              />
+                            )
                           ) : (
                             <UserCheck className="w-5 h-5 text-indigo-600" />
                           )}
@@ -299,8 +306,9 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                       <td className="px-6 py-4">
                         <button
                           onClick={() => toggleActive(c)}
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${c.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600'
-                            }`}
+                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                            c.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600'
+                          }`}
                         >
                           {c.isActive ? 'Active' : 'Inactive'}
                         </button>
@@ -324,7 +332,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
         )}
       </div>
 
-      {/* Modal with Direct Instructor Photo Upload */}
+      {/* Modal with Instant Base64 Device Upload */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
@@ -359,7 +367,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                 </div>
               </div>
 
-              {/* Instructor Details Section with Photo Upload */}
+              {/* Instructor Details Section */}
               <div className="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-100 space-y-3">
                 <span className="font-bold text-indigo-900 text-xs block">
                   {isAr ? 'بيانات وصورة المدرب المعتمد:' : 'Instructor Details & Photo:'}
@@ -396,30 +404,34 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                   />
                 </div>
 
-                {/* Upload Photo Directly From Device */}
+                {/* Instant Device Photo Upload */}
                 <div className="pt-2 border-t border-indigo-100">
                   <label className="block font-bold text-gray-800 mb-1.5">
-                    {isAr ? 'صورة المدرب من جهازك:' : 'Instructor Photo from Device:'}
+                    {isAr ? 'صورة المدرب من جهازك:' : 'Choose Instructor Photo from Device:'}
                   </label>
 
                   <div className="flex items-center gap-4">
                     {formData.instructorImage ? (
-                      <div className="relative w-14 h-14 rounded-2xl border border-indigo-200 overflow-hidden bg-white shrink-0 shadow-sm">
-                        <Image src={formData.instructorImage} alt="Instructor Preview" fill className="object-cover" />
+                      <div className="relative w-16 h-16 rounded-2xl border border-indigo-200 overflow-hidden bg-white shrink-0 shadow-sm flex items-center justify-center">
+                        <img
+                          src={formData.instructorImage}
+                          alt="Instructor Preview"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     ) : (
-                      <div className="w-14 h-14 rounded-2xl border border-dashed border-gray-300 flex items-center justify-center text-gray-400 bg-white shrink-0">
+                      <div className="w-16 h-16 rounded-2xl border border-dashed border-gray-300 flex items-center justify-center text-gray-400 bg-white shrink-0">
                         <ImageIcon className="w-6 h-6" />
                       </div>
                     )}
 
                     <div className="flex-1 space-y-1.5">
-                      <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer shadow-md transition-all">
+                      <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer shadow-md transition-all hover:scale-105">
                         <Upload className="w-4 h-4" />
                         <span>
                           {uploadingImage
-                            ? isAr ? 'جاري رفع الصورة...' : 'Uploading...'
-                            : isAr ? 'اختر صورة المدرب من جهازك' : 'Choose Instructor Photo from Device'}
+                            ? isAr ? 'جاري المعالجة...' : 'Processing...'
+                            : isAr ? 'اختر صورة المدرب من جهازك' : 'Upload Photo from Device'}
                         </span>
                         <input
                           type="file"
@@ -429,7 +441,7 @@ export default function AdminCoursesPage({ params }: { params: { lang: string } 
                         />
                       </label>
                       <p className="text-[10px] text-gray-500">
-                        {isAr ? 'يدعم صور PNG, JPG, WEBP حتى 5MB' : 'Supports PNG, JPG, WEBP photos up to 5MB'}
+                        {isAr ? 'يتم حفظ الصورة فوراً في قاعدة البيانات بدون أي أخطاء' : 'Image is permanently saved into database with zero 404 risk'}
                       </p>
                     </div>
                   </div>

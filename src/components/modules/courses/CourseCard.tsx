@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,12 +10,14 @@ export function CourseCard({ course, lang }: { course: ICourse; lang: string }) 
   const isAr = lang === 'ar';
   const title = isAr ? course.titleAr : course.titleEn;
   const desc = isAr ? course.descriptionAr : course.descriptionEn;
-  const syllabus = isAr ? course.syllabusAr : course.syllabusEn;
+  const syllabus = course.syllabusEn || [];
   const schedule = isAr ? course.scheduleAr : course.scheduleEn;
   const instructorName = isAr ? course.instructorNameAr : course.instructorNameEn;
   const instructorTitle = isAr ? course.instructorTitleAr : course.instructorTitleEn;
   const price = course.priceEGP ?? 0;
   const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
+
+  const isBase64 = course.instructorImage?.startsWith('data:');
 
   return (
     <div className="flex flex-col justify-between bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
@@ -31,17 +35,25 @@ export function CourseCard({ course, lang }: { course: ICourse; lang: string }) 
         <h3 className="text-xl font-black text-gray-900 mb-2.5">{title}</h3>
         <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6 font-medium">{desc}</p>
 
-        {/* Instructor Profile */}
+        {/* Instructor Profile Header */}
         <div className="flex items-center gap-3 p-3 bg-indigo-50/60 rounded-2xl border border-indigo-100/80 mb-5">
-          <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-indigo-100 flex items-center justify-center shrink-0 border border-indigo-200">
+          <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-indigo-100 flex items-center justify-center shrink-0 border border-indigo-200 shadow-sm">
             {course.instructorImage ? (
-              <Image
-                src={course.instructorImage}
-                alt={instructorName || 'Instructor'}
-                width={44}
-                height={44}
-                className="object-cover w-full h-full"
-              />
+              isBase64 ? (
+                <img
+                  src={course.instructorImage}
+                  alt={instructorName || 'Instructor'}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={course.instructorImage}
+                  alt={instructorName || 'Instructor'}
+                  width={48}
+                  height={48}
+                  className="object-cover w-full h-full"
+                />
+              )
             ) : (
               <UserCheck className="w-5 h-5 text-indigo-600" />
             )}
