@@ -10,11 +10,9 @@ export function HeroVideo() {
         if (video) {
             video.defaultMuted = true;
             video.muted = true;
-            // Force autoplay on mount
             const playPromise = video.play();
             if (playPromise !== undefined) {
                 playPromise.catch(() => {
-                    // Retry playback on user touch/interaction if initially blocked
                     const handleFirstInteraction = () => {
                         video.play();
                         window.removeEventListener('click', handleFirstInteraction);
@@ -42,7 +40,6 @@ export function HeroVideo() {
                 <source src="/hero_video.mp4" type="video/mp4" />
                 <source src="/video.mp4" type="video/mp4" />
             </video>
-            {/* Translucent overlay that lets video motion show through clearly */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#FFF5E6]/60 via-[#FFFAF0]/75 to-[#FFFAF0]" />
         </div>
     );

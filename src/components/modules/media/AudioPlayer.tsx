@@ -129,15 +129,11 @@ export function AudioPlayer({ lang }: { lang: string }) {
         }
     }, [isPlaying, currentTrackIndex]);
 
-    const togglePlay = () => {
-        setIsPlaying(!isPlaying);
-    };
-
+    const togglePlay = () => setIsPlaying(!isPlaying);
     const handleNext = () => {
         setCurrentTrackIndex((prev) => (prev + 1) % playlist.length);
         setIsPlaying(true);
     };
-
     const handlePrev = () => {
         setCurrentTrackIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
         setIsPlaying(true);
@@ -178,10 +174,8 @@ export function AudioPlayer({ lang }: { lang: string }) {
                 onEnded={handleNext}
             />
 
-            {/* Main Player Visualizer Header */}
             <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 p-8 sm:p-12 text-white relative overflow-hidden">
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                    {/* Track Info */}
                     <div className="text-center md:text-start space-y-2">
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md">
                             <Music2 className="w-3.5 h-3.5 text-amber-300" />
@@ -195,7 +189,6 @@ export function AudioPlayer({ lang }: { lang: string }) {
                         </p>
                     </div>
 
-                    {/* Animated Equalizer Wave */}
                     <div className="flex items-center gap-1.5 h-12">
                         {[40, 70, 30, 90, 50, 80, 45, 95, 60, 35].map((height, i) => (
                             <span
@@ -207,7 +200,6 @@ export function AudioPlayer({ lang }: { lang: string }) {
                     </div>
                 </div>
 
-                {/* Scrub Bar & Controls */}
                 <div className="mt-8 space-y-3 relative z-10">
                     <input
                         type="range"
@@ -223,7 +215,6 @@ export function AudioPlayer({ lang }: { lang: string }) {
                         <span>{formatTime(duration)}</span>
                     </div>
 
-                    {/* Buttons Controls */}
                     <div className="flex items-center justify-between pt-2">
                         <button
                             onClick={() => {
@@ -238,10 +229,7 @@ export function AudioPlayer({ lang }: { lang: string }) {
                         </button>
 
                         <div className="flex items-center gap-4">
-                            <button
-                                onClick={handlePrev}
-                                className="p-3 rounded-full hover:bg-white/10 text-white transition-colors"
-                            >
+                            <button onClick={handlePrev} className="p-3 rounded-full hover:bg-white/10 text-white transition-colors">
                                 <SkipBack className="w-6 h-6" />
                             </button>
 
@@ -252,10 +240,7 @@ export function AudioPlayer({ lang }: { lang: string }) {
                                 {isPlaying ? <Pause className="w-7 h-7 fill-current" /> : <Play className="w-7 h-7 fill-current ms-0.5" />}
                             </button>
 
-                            <button
-                                onClick={handleNext}
-                                className="p-3 rounded-full hover:bg-white/10 text-white transition-colors"
-                            >
+                            <button onClick={handleNext} className="p-3 rounded-full hover:bg-white/10 text-white transition-colors">
                                 <SkipForward className="w-6 h-6" />
                             </button>
                         </div>
@@ -266,22 +251,16 @@ export function AudioPlayer({ lang }: { lang: string }) {
                                 }`}
                         >
                             <FileText className="w-4 h-4" />
-                            <span className="hidden sm:inline">{isAr ? 'الكلمات والهتافات' : 'Lyrics'}</span>
+                            <span className="hidden sm:inline">{isAr ? 'الكلمات' : 'Lyrics'}</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Playlist and Lyrics Split View */}
             <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Playlist Tracks List */}
                 <div className="lg:col-span-2 space-y-4">
                     <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <h3 className="text-base font-bold text-gray-900">
-                            {isAr ? 'قائمة الأغاني والبودكاست' : 'Media Playlist'}
-                        </h3>
-
-                        {/* Filter Tabs */}
+                        <h3 className="text-base font-bold text-gray-900">{isAr ? 'قائمة الأغاني والبودكاست' : 'Media Playlist'}</h3>
                         <div className="flex items-center gap-1">
                             {[
                                 { key: 'all', labelEn: 'All', labelAr: 'الكل' },
@@ -292,9 +271,7 @@ export function AudioPlayer({ lang }: { lang: string }) {
                                 <button
                                     key={tab.key}
                                     onClick={() => setActiveTab(tab.key as any)}
-                                    className={`px-3 py-1 text-xs font-semibold rounded-lg transition-colors ${activeTab === tab.key
-                                            ? 'bg-blue-600 text-white'
-                                            : 'text-gray-600 hover:bg-gray-100'
+                                    className={`px-3 py-1 text-xs font-semibold rounded-lg transition-colors ${activeTab === tab.key ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'
                                         }`}
                                 >
                                     {isAr ? tab.labelAr : tab.labelEn}
@@ -321,27 +298,15 @@ export function AudioPlayer({ lang }: { lang: string }) {
                                         }`}
                                 >
                                     <div className="flex items-center gap-3.5">
-                                        <div
-                                            className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold ${isSelected
-                                                    ? 'bg-blue-600 text-white'
-                                                    : 'bg-gray-100 text-gray-600'
-                                                }`}
-                                        >
-                                            {isSelected && isPlaying ? (
-                                                <span className="flex gap-0.5 items-end h-3">
-                                                    <span className="w-1 bg-white h-full animate-bounce" />
-                                                    <span className="w-1 bg-white h-2 animate-bounce" />
-                                                </span>
-                                            ) : (
-                                                track.category === 'podcast' ? <Mic className="w-4 h-4" /> : <Music2 className="w-4 h-4" />
-                                            )}
+                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'
+                                            }`}>
+                                            {track.category === 'podcast' ? <Mic className="w-4 h-4" /> : <Music2 className="w-4 h-4" />}
                                         </div>
                                         <div>
                                             <div className={`font-bold text-xs ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>{title}</div>
                                             <div className="text-[11px] text-gray-500">{artist}</div>
                                         </div>
                                     </div>
-
                                     <span className="text-xs font-mono text-gray-400">{track.duration}</span>
                                 </div>
                             );
@@ -349,22 +314,17 @@ export function AudioPlayer({ lang }: { lang: string }) {
                     </div>
                 </div>
 
-                {/* Chants / Lyrics Display */}
                 {showLyrics && (
                     <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 space-y-4">
                         <h4 className="font-bold text-gray-900 text-sm flex items-center gap-1.5">
                             <Sparkles className="w-4 h-4 text-amber-500" />
-                            <span>{isAr ? 'كلمات النشيد / نص الهتاف' : 'Chant & Lyrics Script'}</span>
+                            <span>{isAr ? 'كلمات النشيد' : 'Chant & Lyrics Script'}</span>
                         </h4>
-
                         <div className="space-y-3 text-xs leading-relaxed text-gray-700 bg-white p-4 rounded-xl border border-gray-100 max-h-72 overflow-y-auto">
                             {(isAr ? currentTrack.lyricsAr : currentTrack.lyricsEn).map((line, idx) => (
-                                <p key={idx} className="font-medium">
-                                    {line}
-                                </p>
+                                <p key={idx} className="font-medium">{line}</p>
                             ))}
                         </div>
-
                         <button
                             onClick={() => {
                                 const text = (isAr ? currentTrack.lyricsAr : currentTrack.lyricsEn).join('\n');

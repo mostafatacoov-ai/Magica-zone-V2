@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { IProduct } from '@/types';
-import { CheckCircle2, ShoppingCart, X, Check, Shirt, Backpack } from 'lucide-react';
+import { CheckCircle2, ShoppingCart, X, Check } from 'lucide-react';
 
 interface ProductStoreProps {
     products: IProduct[];
@@ -80,7 +80,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
 
     return (
         <div className="space-y-10">
-            {/* Products Grid */}
             {products.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
                     <p className="text-gray-500 font-medium">
@@ -93,8 +92,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                         const name = isAr ? product.nameAr : product.nameEn;
                         const desc = isAr ? product.descriptionAr : product.descriptionEn;
                         const features = isAr ? product.featuresAr : product.featuresEn;
-
-                        // Default fallback image if specific photo is missing
                         const imageSource =
                             product.imageUrl && product.imageUrl.length > 3
                                 ? product.imageUrl
@@ -108,7 +105,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                 className="flex flex-col justify-between bg-white rounded-3xl p-6 sm:p-7 border border-amber-100/80 shadow-sm hover:shadow-xl transition-all duration-300 group"
                             >
                                 <div className="space-y-4">
-                                    {/* Product Image Container */}
                                     <div className="relative w-full h-52 sm:h-60 rounded-2xl overflow-hidden bg-amber-50/50 border border-amber-100/80 flex items-center justify-center">
                                         <Image
                                             src={imageSource}
@@ -119,7 +115,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                         />
                                     </div>
 
-                                    {/* Top Badge & In Stock */}
                                     <div className="flex items-center justify-between gap-2">
                                         <span className="text-[11px] font-black text-blue-700 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wider">
                                             {isUniform ? (isAr ? 'يونيفورم رسمي' : 'Official Apparel') : (isAr ? 'مستلزمات تنفيذية' : 'Smart Gear')}
@@ -130,13 +125,10 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                     </div>
 
                                     <div>
-                                        <h3 className="font-black text-gray-900 text-lg group-hover:text-blue-600 transition-colors">
-                                            {name}
-                                        </h3>
+                                        <h3 className="font-black text-gray-900 text-lg group-hover:text-blue-600 transition-colors">{name}</h3>
                                         <p className="text-xs text-gray-500 leading-relaxed mt-1.5 font-medium line-clamp-2">{desc}</p>
                                     </div>
 
-                                    {/* Feature Highlights */}
                                     {features && features.length > 0 && (
                                         <div className="space-y-1.5 pt-3 border-t border-gray-100">
                                             {features.map((feat, idx) => (
@@ -149,19 +141,15 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                     )}
                                 </div>
 
-                                {/* Price & Buy Button */}
                                 <div className="pt-4 border-t border-gray-100 flex items-center justify-between mt-4">
                                     <div>
                                         <span className="text-[10px] text-gray-400 font-bold block uppercase">{isAr ? 'السعر' : 'Price'}</span>
                                         {product.priceEGP && product.priceEGP > 0 ? (
                                             <span className="text-2xl font-black text-gray-900">
-                                                {product.priceEGP.toLocaleString()}{' '}
-                                                <span className="text-xs text-gray-500 font-bold">{isAr ? 'ج.م' : 'EGP'}</span>
+                                                {product.priceEGP.toLocaleString()} <span className="text-xs text-gray-500 font-bold">{isAr ? 'ج.م' : 'EGP'}</span>
                                             </span>
                                         ) : (
-                                            <span className="text-xs font-black text-blue-600">
-                                                {isAr ? 'السعر عند الطلب' : 'Price Upon Inquiry'}
-                                            </span>
+                                            <span className="text-xs font-black text-blue-600">{isAr ? 'السعر عند الطلب' : 'Price Upon Inquiry'}</span>
                                         )}
                                     </div>
 
@@ -179,7 +167,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                 </div>
             )}
 
-            {/* Checkout Modal */}
             {isOrdering && selectedProduct && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
@@ -202,10 +189,7 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                     </h3>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => setIsOrdering(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-lg"
-                            >
+                            <button onClick={() => setIsOrdering(false)} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -220,24 +204,18 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                 </h4>
                                 <p className="text-xs text-emerald-700 max-w-xs mx-auto">
                                     {isAr
-                                        ? 'سيقوم فريق المبيعات بالتواصل معك هاتفياً أو عبر الواتساب لتأكيد الشحن والتسليم.'
-                                        : 'Our sales team will contact you via phone or WhatsApp to confirm delivery details.'}
+                                        ? 'سيقوم فريق المبيعات بالتواصل معك هاتفياً لتأكيد الشحن والتسليم.'
+                                        : 'Our sales team will contact you via phone or WhatsApp to confirm delivery.'}
                                 </p>
-                                <button
-                                    onClick={() => setIsOrdering(false)}
-                                    className="mt-4 px-6 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl"
-                                >
+                                <button onClick={() => setIsOrdering(false)} className="mt-4 px-6 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl">
                                     {isAr ? 'إغلاق' : 'Close'}
                                 </button>
                             </div>
                         ) : (
                             <form onSubmit={handleOrderSubmit} className="space-y-4 text-xs">
-                                {/* Size Selector for Uniforms */}
                                 {isUniform && (
                                     <div>
-                                        <label className="block font-bold text-gray-800 mb-1.5">
-                                            {isAr ? 'اختر المقاس:' : 'Select Size:'}
-                                        </label>
+                                        <label className="block font-bold text-gray-800 mb-1.5">{isAr ? 'اختر المقاس:' : 'Select Size:'}</label>
                                         <div className="grid grid-cols-2 gap-2">
                                             {sizes.map((s) => (
                                                 <button
@@ -256,11 +234,8 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                     </div>
                                 )}
 
-                                {/* Quantity */}
                                 <div>
-                                    <label className="block font-bold text-gray-800 mb-1.5">
-                                        {isAr ? 'الكمية المطلوبة:' : 'Quantity:'}
-                                    </label>
+                                    <label className="block font-bold text-gray-800 mb-1.5">{isAr ? 'الكمية المطلوبة:' : 'Quantity:'}</label>
                                     <div className="flex items-center gap-3">
                                         <button
                                             type="button"
@@ -280,7 +255,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                     </div>
                                 </div>
 
-                                {/* Customer Details */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                                     <div>
                                         <label className="block font-bold text-gray-700 mb-1">{isAr ? 'الاسم الكامل *' : 'Full Name *'}</label>
@@ -313,7 +287,6 @@ export function ProductStore({ products, lang, storeType }: ProductStoreProps) {
                                     />
                                 </div>
 
-                                {/* Total Summary */}
                                 <div className="p-3.5 bg-amber-50/70 border border-amber-200/70 rounded-2xl flex items-center justify-between">
                                     <span className="font-bold text-gray-800">{isAr ? 'إجمالي التكلفة:' : 'Total Amount:'}</span>
                                     {selectedProduct.priceEGP && selectedProduct.priceEGP > 0 ? (
