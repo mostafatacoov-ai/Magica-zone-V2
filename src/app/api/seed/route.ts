@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db/mongodb';
 import { Activity } from '@/lib/models/Activity';
 import { Product } from '@/lib/models/Product';
 import { Course } from '@/lib/models/Course';
 import { RadioTrack } from '@/lib/models/RadioTrack';
+import { getSessionUser } from '@/lib/auth';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -757,8 +758,27 @@ const defaultRadioTracks = [
   },
 ];
 
-async function handleSeed() {
+async function handleSeed(req: NextRequest) {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
+    if (isProduction) {
+      const session = getSessionUser();
+      const adminCookie = req.cookies.get('magica_admin_session')?.value;
+      const secretHeader = req.headers.get('x-admin-passcode');
+
+      const isAuthorized =
+        (session && session.role === 'admin') ||
+        adminCookie === 'authenticated' ||
+        secretHeader === (process.env.ADMIN_PASSCODE || 'magica2026!');
+
+      if (!isAuthorized) {
+        return NextResponse.json(
+          { success: false, message: 'Unauthorized: Admin authentication required to seed database' },
+          { status: 401 }
+        );
+      }
+    }
+
     await connectToDatabase();
 
     // 1. Scan public/supplies and public/uniform on disk
@@ -846,11 +866,7 @@ async function handleSeed() {
     ];
 
     // Combine all products
-    const allProducts = [
-      ...generatedSuppliesProducts,
-      ...generatedUniformProducts,
-      ...additionalGearProducts,
-    ];
+    const allProducts = [...generatedSuppliesProducts, ...generatedUniformProducts, ...additionalGearProducts];
 
     // 2. Clear and Insert all collections
     await Activity.deleteMany({});
@@ -884,10 +900,10 @@ async function handleSeed() {
   }
 }
 
-export async function GET() {
-  return handleSeed();
+export async function GET(req: NextRequest) {
+  return handleSeed(req);
 }
 
-export async function POST() {
-  return handleSeed();
+export async function POST(req: NextRequest) {
+  return handleSeed(req);
 }

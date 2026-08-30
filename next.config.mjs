@@ -17,15 +17,45 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactStrictMode: false,
-  poweredByHeader: false,
+  poweredByHeader: false, // Hides 'X-Powered-By: Next.js' to prevent technology fingerprinting
 
-  // Flatten chunk filenames so Apache never encounters %5Blang%5D bracket folders
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.output.chunkFilename = 'static/chunks/[name]-[contenthash].js';
-    }
-    return config;
+  // Defensive HTTP Headers
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload', // Enforce HTTPS
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block', // Block cross-site scripting
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN', // Protect against Clickjacking
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff', // Prevent MIME-type sniffing
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()', // Restrict unused browser APIs
+          },
+        ],
+      },
+    ];
   },
 };
 
