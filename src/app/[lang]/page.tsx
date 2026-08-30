@@ -343,12 +343,14 @@ export default function HomePage({ params }: { params: { lang: string } }) {
           <div className="pt-6 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="#sectors"
+              prefetch={false}
               className="px-8 py-4 text-sm font-black text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-xl transition-all hover:scale-105"
             >
               {isAr ? "استكشف قطاعات وبرامج ماجيكا ↓" : "Explore Sectors & Offerings ↓"}
             </Link>
             <Link
               href={`/${params.lang}/dashboard`}
+              prefetch={false}
               className="inline-flex items-center gap-2 px-8 py-4 text-sm font-black text-gray-800 bg-white border border-amber-200/80 hover:bg-amber-50/50 rounded-2xl transition-all shadow-md backdrop-blur-sm"
             >
               <span>{isAr ? "بوابة أولياء الأمور والطلاب" : "Parent & Student Portal"}</span>
@@ -395,6 +397,7 @@ export default function HomePage({ params }: { params: { lang: string } }) {
 
           <Link
             href={`/${params.lang}/inquiry`}
+            prefetch={false}
             className="px-6 py-4 bg-amber-400 hover:bg-amber-300 text-gray-950 font-black text-xs rounded-2xl shrink-0 transition-transform hover:scale-105 shadow-xl"
           >
             {isAr ? "احجز فعاليتك أو سجل طفلك" : "Enroll Your Child Now"}
@@ -418,97 +421,46 @@ export default function HomePage({ params }: { params: { lang: string } }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sectors.map((sector) => {
             const Icon = sector.icon;
-            const title = isAr ? sector.titleAr : sector.titleEn;
-            const tagline = isAr ? sector.taglineAr : sector.taglineEn;
-            const desc = isAr ? sector.descAr : sector.descEn;
-            const offers = isAr ? sector.offersAr : sector.offersEn;
-            const ctaText = isAr ? sector.ctaTextAr : sector.ctaTextEn;
-
             return (
               <div
                 key={sector.id}
-                className={`bg-white rounded-3xl p-6 sm:p-8 border-2 ${sector.borderColor} shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-6 group`}
+                className={`${sector.borderColor} border-2 rounded-2xl p-6 bg-white/50 backdrop-blur-sm hover:shadow-lg transition-all group`}
               >
-                <div className="space-y-4">
-                  {/* Top Graphic + Badge */}
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="relative w-14 h-14 shrink-0 rounded-2xl bg-amber-50/60 p-2 border border-gray-100 flex items-center justify-center overflow-hidden">
-                      <Icon className="w-6 h-6 text-gray-700" />
-                    </div>
-
-                    <span className={`text-[11px] font-black px-3 py-1 rounded-full ${sector.badgeBg}`}>
-                      {tagline}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {title}
-                    </h3>
-                    <p className="text-xs text-gray-600 leading-relaxed mt-2 font-medium">{desc}</p>
-                  </div>
-
-                  {/* Feature Checklist */}
-                  <div className="space-y-1.5 pt-3 border-t border-gray-100">
-                    <span className="text-[11px] font-black text-gray-700 uppercase tracking-wider block mb-1">
-                      {isAr ? "ما يقدمه هذا القطاع:" : "What This Sector Offers:"}
-                    </span>
-                    {offers.map((offer, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-gray-600">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                        <span className="font-medium">{offer}</span>
-                      </div>
-                    ))}
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`${sector.badgeBg} p-3 rounded-xl`}>
+                    <Icon className="w-6 h-6" />
                   </div>
                 </div>
-
-                {/* Bottom Action Button */}
-                <div className="pt-4 border-t border-gray-100">
-                  <Link prefetch={false}
-                    href={sector.ctaHref}
-                    className={`inline-flex items-center justify-between w-full py-3.5 px-4 text-xs font-black text-white ${sector.btnBg} rounded-2xl transition-all shadow-md`}
-                  >
-                    <span>{ctaText}</span>
-                    <ArrowIcon className="w-4 h-4" />
-                  </Link>
-                </div>
+                <h3 className="text-lg font-black text-gray-900 mb-2">
+                  {isAr ? sector.titleAr : sector.titleEn}
+                </h3>
+                <p className="text-xs font-bold text-gray-600 mb-3">
+                  {isAr ? sector.taglineAr : sector.taglineEn}
+                </p>
+                <p className="text-xs text-gray-700 mb-4 leading-relaxed">
+                  {isAr ? sector.descAr : sector.descEn}
+                </p>
+                <ul className="space-y-2 mb-6">
+                  {(isAr ? sector.offersAr : sector.offersEn).map((offer, idx) => (
+                    <li key={idx} className="text-xs text-gray-700 flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                      <span>{offer}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={sector.ctaHref}
+                  prefetch={false}
+                  className={`${sector.btnBg} text-white font-black text-xs py-3 px-4 rounded-xl block text-center transition-all hover:scale-105`}
+                >
+                  {isAr ? sector.ctaTextAr : sector.ctaTextEn}
+                </Link>
               </div>
             );
           })}
-        </div>
-      </section>
-
-      {/* Final Enrollment CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 rounded-3xl p-8 sm:p-14 text-white text-center sm:text-start flex flex-col sm:flex-row items-center justify-between gap-8 shadow-2xl border border-white/10">
-          <div className="max-w-xl space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-black">
-              {isAr ? "هل أنت مستعد لتسجيل طفلك في عالم ماجيكا؟" : "Ready to Enroll Your Child in This Transformational World?"}
-            </h2>
-            <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-              {isAr
-                ? "أنشئ حسابك الآن وافتح أبواب القيادة، ابتكارات STEM، والذكاء المالي لأطفالك."
-                : "Create an account now and open the doors of leadership, STEM innovation, and financial intelligence for your children."}
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <Link
-              href={`/${params.lang}/register`}
-              className="px-8 py-4 text-xs font-black text-gray-950 bg-amber-400 hover:bg-amber-300 rounded-2xl transition-transform hover:scale-105 shadow-xl"
-            >
-              {isAr ? "تسجيل طفلك الآن" : "Register Your Child Now"}
-            </Link>
-            <Link
-              href={`/${params.lang}/about`}
-              className="px-6 py-4 text-xs font-bold text-white bg-white/15 hover:bg-white/25 rounded-2xl transition-colors"
-            >
-              {isAr ? "تعرف على ماجيكا" : "Learn More About Us"}
-            </Link>
-          </div>
         </div>
       </section>
     </div>

@@ -127,7 +127,6 @@ export function Header({ lang }: { lang: string }) {
     },
   ];
 
-  // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -145,13 +144,13 @@ export function Header({ lang }: { lang: string }) {
     <header className="sticky top-0 z-50 bg-[#FFFAF0]/95 backdrop-blur-md border-b border-amber-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
         {/* Official Brand Logo */}
-        <Link prefetch={false} href={`/${lang}`} className="flex items-center gap-3">
+        <Link href={`/${lang}`} prefetch={false} className="flex items-center gap-3">
           <div className="relative h-10 w-36 sm:w-44">
             <Image
               src="/logo.png"
               alt="Magica Zone Logo"
               fill
-              sizes="(max-width: 768px) 144px, 176px"
+              sizes="(max-width: 768px) 150px, 180px"
               className="object-contain"
               priority
               onError={(e) => {
@@ -163,8 +162,9 @@ export function Header({ lang }: { lang: string }) {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link prefetch={false}
+          <Link
             href={`/${lang}`}
+            prefetch={false}
             className="text-xs font-black text-gray-800 hover:text-blue-600 transition-colors"
           >
             {isAr ? 'الرئيسية' : 'Home'}
@@ -179,8 +179,9 @@ export function Header({ lang }: { lang: string }) {
             >
               <span>{isAr ? 'عالم ماجيكا' : 'Our World'}</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180 text-blue-600' : ''
-                  }`}
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  servicesDropdownOpen ? 'rotate-180 text-blue-600' : ''
+                }`}
               />
             </button>
 
@@ -191,8 +192,9 @@ export function Header({ lang }: { lang: string }) {
                 className="absolute top-full start-0 mt-1 w-84 sm:w-[420px] bg-white rounded-3xl border border-amber-100 shadow-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-150 space-y-2"
               >
                 {/* Comprehensive World Header Link */}
-                <Link prefetch={false}
+                <Link
                   href={`/${lang}#sectors`}
+                  prefetch={false}
                   onClick={() => setServicesDropdownOpen(false)}
                   className="flex items-center justify-between p-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-sm hover:from-blue-700 hover:to-indigo-700 transition-all group"
                 >
@@ -211,9 +213,10 @@ export function Header({ lang }: { lang: string }) {
                   {magicaSectors.map((srv) => {
                     const Icon = srv.icon;
                     return (
-                      <Link prefetch={false}
+                      <Link
                         key={srv.href + srv.labelEn}
                         href={srv.href}
+                        prefetch={false}
                         onClick={() => setServicesDropdownOpen(false)}
                         className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-amber-50/50 transition-colors group"
                       >
@@ -236,24 +239,27 @@ export function Header({ lang }: { lang: string }) {
             )}
           </div>
 
-          <Link prefetch={false}
+          <Link
             href={`/${lang}/about`}
+            prefetch={false}
             className="text-xs font-black text-gray-800 hover:text-blue-600 transition-colors"
           >
             {isAr ? 'عن ماجيكا' : 'About Us'}
           </Link>
 
-          <Link prefetch={false}
+          <Link
             href={`/${lang}/contact`}
+            prefetch={false}
             className="text-xs font-black text-gray-800 hover:text-blue-600 transition-colors"
           >
             {isAr ? 'اتصل بنا' : 'Contact'}
           </Link>
 
-          {/* Student Portal - Rendered ONLY When Signed In */}
+          {/* Student Portal - Shown ONLY when signed in */}
           {currentUser && (
-            <Link prefetch={false}
+            <Link
               href={`/${lang}/dashboard`}
+              prefetch={false}
               className="text-xs font-black text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-xl transition-colors border border-blue-200"
             >
               {isAr ? 'بوابة الطالب' : 'Student Portal'}
@@ -263,18 +269,20 @@ export function Header({ lang }: { lang: string }) {
 
         {/* Action & Auth Area */}
         <div className="hidden md:flex items-center gap-3">
-          <Link prefetch={false}
+          <Link
             href={switchLangPath}
+            prefetch={false}
             className="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-amber-200/70 hover:bg-amber-50 rounded-xl transition-colors shadow-sm"
           >
             {isAr ? 'English' : 'عربي'}
           </Link>
 
           {currentUser ? (
-            /* Logged In: Show Name & Sign Out */
+            /* Logged In */
             <div className="flex items-center gap-2">
-              <Link prefetch={false}
+              <Link
                 href={`/${lang}/dashboard`}
+                prefetch={false}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-900 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 shadow-sm"
               >
                 <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">
@@ -291,9 +299,10 @@ export function Header({ lang }: { lang: string }) {
               </button>
             </div>
           ) : (
-            /* Logged Out: Show Sign In */
-            <Link prefetch={false}
+            /* Logged Out */
+            <Link
               href={`/${lang}/login`}
+              prefetch={false}
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-gray-800 hover:text-blue-600 transition-colors"
             >
               <User className="w-4 h-4" />
@@ -301,8 +310,9 @@ export function Header({ lang }: { lang: string }) {
             </Link>
           )}
 
-          <Link prefetch={false}
+          <Link
             href={`/${lang}/inquiry`}
+            prefetch={false}
             className="px-4 py-2 text-xs font-black text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all hover:scale-105"
           >
             {isAr ? 'احجز فعاليتك' : 'Book Event'}
@@ -322,8 +332,9 @@ export function Header({ lang }: { lang: string }) {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#FFFAF0] border-b border-amber-200 px-4 pt-2 pb-6 space-y-3 text-xs max-h-[85vh] overflow-y-auto">
-          <Link prefetch={false}
+          <Link
             href={`/${lang}`}
+            prefetch={false}
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 font-bold text-gray-900 hover:text-blue-600"
           >
@@ -337,9 +348,10 @@ export function Header({ lang }: { lang: string }) {
             {magicaSectors.map((srv) => {
               const Icon = srv.icon;
               return (
-                <Link prefetch={false}
+                <Link
                   key={srv.href + srv.labelEn}
                   href={srv.href}
+                  prefetch={false}
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2.5 py-2 text-gray-800 hover:text-blue-600"
                 >
@@ -351,15 +363,17 @@ export function Header({ lang }: { lang: string }) {
           </div>
 
           <div className="pt-2 border-t border-amber-200 space-y-2">
-            <Link prefetch={false}
+            <Link
               href={`/${lang}/about`}
+              prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
               className="block py-1.5 font-bold text-gray-800"
             >
               {isAr ? 'عن ماجيكا' : 'About Us'}
             </Link>
-            <Link prefetch={false}
+            <Link
               href={`/${lang}/contact`}
+              prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
               className="block py-1.5 font-bold text-gray-800"
             >
@@ -367,8 +381,9 @@ export function Header({ lang }: { lang: string }) {
             </Link>
 
             {currentUser && (
-              <Link prefetch={false}
+              <Link
                 href={`/${lang}/dashboard`}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className="block py-1.5 font-bold text-blue-600"
               >
@@ -378,8 +393,9 @@ export function Header({ lang }: { lang: string }) {
           </div>
 
           <div className="pt-4 border-t border-amber-200 flex items-center justify-between">
-            <Link prefetch={false}
+            <Link
               href={switchLangPath}
+              prefetch={false}
               className="px-3 py-1.5 font-bold text-gray-800 bg-white border border-amber-200 rounded-xl"
             >
               {isAr ? 'English' : 'عربي'}
@@ -396,8 +412,9 @@ export function Header({ lang }: { lang: string }) {
                 {isAr ? 'تسجيل الخروج' : 'Sign Out'}
               </button>
             ) : (
-              <Link prefetch={false}
+              <Link
                 href={`/${lang}/login`}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-4 py-2 font-bold text-blue-600 bg-blue-50 rounded-xl"
               >
