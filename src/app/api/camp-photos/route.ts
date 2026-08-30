@@ -4,6 +4,8 @@ import { CampPhoto } from '@/lib/models/CampPhoto';
 import fs from 'node:fs';
 import path from 'node:path';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     await connectToDatabase();
@@ -14,6 +16,7 @@ export async function GET() {
         success: true,
         photos: dbPhotos.map((p) => p.imageUrl),
         rawPhotos: dbPhotos,
+        count: dbPhotos.length,
       });
     }
 
@@ -32,9 +35,10 @@ export async function GET() {
       success: true,
       photos: localPhotos.length > 0 ? localPhotos : ['/magica-camp-print.png'],
       rawPhotos: [],
+      count: localPhotos.length,
     });
   } catch (error: any) {
-    return NextResponse.json({ success: true, photos: ['/magica-camp-print.png'], rawPhotos: [] });
+    return NextResponse.json({ success: true, photos: ['/magica-camp-print.png'], rawPhotos: [], count: 0 });
   }
 }
 
@@ -42,6 +46,18 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     await connectToDatabase();
+
+    // Support both multiple batch photos array and single photo object
+    if (Array.isArray(body.photos) && body.photos.length > 0) {
+      const inserted = await CampPhoto.insertMany(body.photos);
+      return NextResponse.json({ success: true, count: inserted.length, data: inserted }, { status: 201 });
+    }
+
+    if (Array.isArray(body)) {
+      const inserted = await CampPhoto.insertMany(body);
+      return NextResponse.json({ success: true, count: inserted.length, data: inserted }, { status: 201 });
+    }
+
     const newPhoto = await CampPhoto.create(body);
     return NextResponse.json({ success: true, data: newPhoto }, { status: 201 });
   } catch (error: any) {
